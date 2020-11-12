@@ -5,9 +5,13 @@
   min-height: 100vh;
   z-index: 1;
   overflow: hidden;
+  opacity: 1;
+  visibility: visible;
 
   &--hidden {
-    display: none;
+    // display: none;
+    opacity: 0;
+    visibility: hidden;
   }
 
   @media (max-width: $tablet) and (orientation: portrait) {
