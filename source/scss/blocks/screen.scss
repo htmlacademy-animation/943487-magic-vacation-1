@@ -76,6 +76,9 @@
 
 .screen__footer-wrapper {
   @include container;
+  margin-bottom: -55px;
+  opacity: 0;
+  transition: .5s cubic-bezier(.33,.96,.53,.92);
 
   @media (max-width: $tablet) and (orientation: portrait) {
     opacity: 0;
@@ -92,6 +95,11 @@
       opacity: 1;
     }
   }
+}
+
+.page-loaded .screen__footer-wrapper {
+  opacity: 1;
+  margin-bottom: 0;
 }
 
 .screen__footer-enlarge {
