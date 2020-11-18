@@ -94,6 +94,8 @@
   justify-content: flex-end;
   align-items: flex-end;
   margin-top: auto;
+  opacity: 0;
+  transition: opacity .3s ease .3s;
 
   @media (max-width: $tablet) and (orientation: portrait) {
     flex-direction: column;
@@ -102,6 +104,10 @@
     margin: auto 0;
     padding-left: 2rem;
   }
+}
+
+.screen.active .prizes__list {
+  opacity: 1;
 }
 
 .prizes__item {
