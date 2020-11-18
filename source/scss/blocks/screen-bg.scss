@@ -1,0 +1,15 @@
+.screen-bg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  transform-origin: bottom;
+  height: 0;
+  background-color: $c-dark;
+  z-index: 2;
+  transition: height 0 ease;
+
+  .screen--prizes.active ~ & {
+    height: 100vh;
+  }
+}
