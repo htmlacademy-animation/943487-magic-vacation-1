@@ -148,7 +148,7 @@
     content: counter(li);
     counter-increment: li;
     position: absolute;
-    top: 0;
+    top: 2px;
     left: 0;
     width: 4.5rem;
     height: 4.5rem;
@@ -186,10 +186,49 @@
   }
 }
 
+.screen.active .rules__item {
+  &::before {
+    animation: showBullet 0.3s cubic-bezier(0.25, 0.65, 0.86, 1.5) backwards;
+  }
+
+  & p {
+    animation: opacityRulesParagraph 0.7s ease backwards,
+      transformRulesParagraph 0.5s ease backwards;
+  }
+
+  &:nth-child(2) {
+    &::before,
+    & p {
+      animation-delay: 0.2s;
+    }
+  }
+
+  &:nth-child(3) {
+    &::before,
+    & p {
+      animation-delay: 0.4s;
+    }
+  }
+
+  &:nth-child(4) {
+    &::before,
+    & p {
+      animation-delay: 0.6s;
+    }
+  }
+}
+
 .rules__link {
   position: absolute;
   bottom: 6rem;
   right: 5.6rem;
+
+  &::before {
+    transform: translateY(-50%);
+    left: inherit;
+    right: 0;
+    width: 100%;
+  }
 
   @media (min-width: $stop-scaling) {
     bottom: 60px;
@@ -209,5 +248,61 @@
   @media (max-width: $mobile) and (orientation: landscape) {
     bottom: 2rem;
     right: 1.5rem;
+  }
+}
+
+.screen.active .rules__link {
+  & span {
+    animation: opacityRulesLink 0.5s ease 1.1s backwards;
+  }
+
+  &::before {
+    animation: widthRulesLink 0.3s ease 0.9s backwards,
+      opacityRulesLink 0.3s ease 0.9s backwards;
+  }
+}
+
+@keyframes showBullet {
+  from {
+    transform: scale(0, 0);
+  }
+  to {
+    transform: scale(1, 1);
+  }
+}
+
+@keyframes opacityRulesParagraph {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes transformRulesParagraph {
+  from {
+    transform: translateX(25px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes widthRulesLink {
+  from {
+    width: 34%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes opacityRulesLink {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
