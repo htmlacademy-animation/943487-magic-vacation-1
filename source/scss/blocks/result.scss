@@ -46,11 +46,193 @@
   }
 
   img {
+    position: absolute;
     display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
+  }
+
+  .img-flamingo {
+    max-width: 328px;
+    height: auto;
+    left: calc(50% - 305px);
+    bottom: -265px;
+    opacity: 0;
+    z-index: 10;
+    transition: opacity 1.5s ease 0.3s,
+      bottom 1s cubic-bezier(0.46, 0.76, 0.68, 1.3) 0.3s;
+
+    @media (max-width: 768px) and (orientation: portrait) {
+      display: none;
+    }
+  }
+
+  .img-leafblue1 {
+    max-width: 356px;
+    height: auto;
+    left: calc(50% + 1px);
+    bottom: 28%;
+    z-index: 6;
+
+    @media (max-width: 768px) and (orientation: portrait) {
+      display: none;
+    }
+  }
+
+  .img-leafblue2 {
+    max-width: 356px;
+    height: auto;
+    left: calc(50% - 442px);
+    bottom: 17%;
+    z-index: 7;
+
+    @media (max-width: 768px) and (orientation: portrait) {
+      display: none;
+    }
+  }
+
+  .img-leafgreen {
+    max-width: 380px;
+    height: auto;
+    left: calc(50% - 27px);
+    bottom: 24%;
+    z-index: 8;
+
+    @media (max-width: 768px) and (orientation: portrait) {
+      display: none;
+    }
+  }
+
+  .img-suitcase {
+    opacity: 0;
+    max-width: 439px;
+    height: auto;
+    left: calc(50% - 264px);
+    z-index: 9;
+    transform: scale(0.1);
+    bottom: -264px;
+    transition: opacity 0.5s ease,
+      bottom 1s cubic-bezier(0.46, 0.76, 0.68, 1.3) 0.3s,
+      transform 1.2s ease 0.3s;
+
+    @media (max-width: 768px) and (orientation: portrait) {
+      display: none;
+    }
+  }
+
+  .img-mob {
+    display: none;
+
+    @media (max-width: 768px) and (orientation: portrait) {
+      display: block;
+    }
+  }
+}
+
+.screen.screen--show .result__image {
+  .img-suitcase {
+    opacity: 1;
+    transform: scale(1);
+    bottom: 17%;
+  }
+  .img-leafblue1 {
+    animation: showLeafBlue1 2s ease-out 0.3s backwards;
+  }
+  .img-leafblue2 {
+    animation: showLeafBlue2 2s ease-out 0.3s backwards;
+  }
+  .img-leafgreen {
+    animation: showLeafGreen 2s ease-out 0.3s backwards;
+  }
+  .img-flamingo {
+    opacity: 1;
+    bottom: 18%;
+    animation: showFlamingo 3s linear 1s backwards infinite;
+  }
+}
+
+@keyframes showFlamingo {
+  0% {
+    transform: rotate(0) translate(0, 0);
+  }
+  25% {
+    transform: rotate(0) translate(0, -20px);
+  }
+  50% {
+    transform: rotate(0) translate(0, 0);
+  }
+  75% {
+    transform: rotate(-3deg) translate(-8px, 20px);
+  }
+  100% {
+    transform: rotate(0deg) translate(0, 0);
+  }
+}
+
+@keyframes showLeafGreen {
+  0% {
+    opacity: 0;
+    transform: rotate(-25deg) translate(-6px, -82px);
+  }
+  30% {
+    transform: rotate(17deg) translate(22px, 55px);
+  }
+  50% {
+    transform: rotate(-10deg) translate(-7px, -33px);
+  }
+  70% {
+    transform: rotate(7deg) translate(7px, 24px);
+  }
+  80% {
+    transform: rotate(-6deg) translate(-7px, -19px);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes showLeafBlue1 {
+  0% {
+    opacity: 0;
+    transform: rotate(-25deg) translate(-16px, -58px);
+  }
+  20% {
+    transform: rotate(25deg) translate(39px, 48px);
+  }
+  40% {
+    transform: rotate(-20deg) translate(-15px, -47px);
+  }
+  60% {
+    transform: rotate(10deg) translate(13px, 19px);
+  }
+  80% {
+    transform: rotate(-10deg) translate(-7px, -21px);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes showLeafBlue2 {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    transform: rotate(-20deg) translate(-2px, 50px);
+  }
+  40% {
+    transform: rotate(10deg) translate(-4px, -23px);
+  }
+  60% {
+    transform: rotate(-10deg) translate(-1px, 20px);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
   }
 }
 
