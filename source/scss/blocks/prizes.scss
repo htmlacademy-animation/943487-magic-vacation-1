@@ -58,6 +58,8 @@
   text-transform: uppercase;
   font-size: 2.4rem;
   line-height: 1.2;
+  opacity: 0;
+  transition: opacity .5s .3s;
 
   @media (min-width: $stop-scaling) {
     margin-left: 58px;
@@ -86,6 +88,10 @@
   p {
     margin: 0;
   }
+}
+
+.screen.active .prizes__lead {
+    opacity: 1;
 }
 
 .prizes__list {
