@@ -98,7 +98,7 @@
 
   opacity: 0;
   transform: translateX(20px);
-  transition: .7s;
+  transition: 0.7s;
 
   @media (min-width: $stop-scaling) {
     margin-top: 36px;
@@ -139,11 +139,11 @@
 }
 
 .swiper-slide-active .slider__item-text {
-  transition-delay: .3s;
+  transition-delay: 0.3s;
 }
 
-.swiper-slide-next .slider__item-text  {
-  transition-delay: .5s;
+.swiper-slide-next .slider__item-text {
+  transition-delay: 0.5s;
 }
 
 .slider__controls {
@@ -254,6 +254,8 @@
   font-weight: 400;
   font-size: 2.4rem;
   line-height: 4rem;
+  opacity: 0;
+  transition: opacity 0.7s;
 
   @media (min-width: $stop-scaling) {
     bottom: 28px;
@@ -295,5 +297,37 @@
       height: 0.4rem;
       background-color: $c-light;
     }
+  }
+}
+
+.screen.active {
+  .slider__control--next {
+    animation: showRoundButtonRight 0.5s ease backwards;
+  }
+  .slider__control--prev {
+    animation: showRoundButtonLeft 0.5s ease backwards;
+  }
+  .slider__pagination.swiper-pagination {
+    opacity: 1;
+  }
+}
+
+@keyframes showRoundButtonRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px) rotate(90deg);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes showRoundButtonLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px) rotate(-90deg);
+  }
+  to {
+    transform: none;
   }
 }
