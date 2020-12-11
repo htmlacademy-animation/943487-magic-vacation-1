@@ -22,6 +22,8 @@
     text-transform: uppercase;
     font-size: 1.2rem;
     line-height: 1.2;
+    opacity: 0;
+    transition: opacity 0.5s;
 
     @media (min-width: $stop-scaling) {
       font-size: 12px;
@@ -89,4 +91,8 @@
       padding: 0.9rem 0;
     }
   }
+}
+
+.screen.active .disclaimer ul {
+  opacity: 1;
 }

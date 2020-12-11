@@ -55,6 +55,7 @@
     width: 3.5rem;
     height: 3.5rem;
     border-radius: 0 3.6rem 0 0;
+    transition: 0.3s ease;
 
     &.screen__footer--full {
       width: 100%;
@@ -78,7 +79,7 @@
   @include container;
   margin-bottom: -55px;
   opacity: 0;
-  transition: .5s cubic-bezier(.33,.96,.53,.92);
+  transition: 0.5s ease 0.2s;
 
   @media (max-width: $tablet) and (orientation: portrait) {
     opacity: 0;
@@ -90,6 +91,7 @@
 
   @media (max-width: $mobile) and (orientation: landscape) {
     opacity: 0;
+    transition: 0.5s cubic-bezier(0.33, 0.96, 0.53, 0.92) 0s;
 
     .screen__footer--full & {
       opacity: 1;
@@ -98,8 +100,10 @@
 }
 
 .page-loaded .screen__footer-wrapper {
-  opacity: 1;
-  margin-bottom: 0;
+  @media (max-width: $mobile) and (orientation: landscape) {
+    opacity: 1;
+    margin-bottom: 0;
+  }
 }
 
 .screen__footer-enlarge {
@@ -217,6 +221,8 @@
   text-align: center;
   font-size: 1.2rem;
   line-height: 1.2;
+  opacity: 0;
+  transition: opacity 0.5s;
 
   @media (min-width: $stop-scaling) {
     padding: 8px 0;
@@ -300,9 +306,14 @@
   }
 }
 
+.screen.active .screen__footer-note {
+  opacity: 1;
+}
+
 .screen--story {
   background-color: $c-dark;
-  background-image: url("../img/slide1.jpg"), url("../img/slide2.jpg"), url("../img/slide3.jpg"), url("../img/slide4.jpg");
+  background-image: url("../img/slide1.jpg"), url("../img/slide2.jpg"),
+    url("../img/slide3.jpg"), url("../img/slide4.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;

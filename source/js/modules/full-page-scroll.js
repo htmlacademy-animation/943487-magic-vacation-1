@@ -40,6 +40,7 @@ export default class FullPageScroll {
   }
 
   changeVisibilityDisplay() {
+    let body = document.querySelector("body");
     this.screenElements.forEach((screen) => {
       let prevScreenActive = document.querySelector(`.screen.active`);
       const screenChangeTimout = screen.classList.contains(`screen--story`) && this.screenElements[this.activeScreen].classList.contains(`screen--prizes`);
@@ -58,6 +59,11 @@ export default class FullPageScroll {
         }, 800);
         
       } else {
+        body.classList.forEach(className => {
+          if (className.startsWith('slide-')) {
+            body.classList.remove(className);
+          }
+        });
         screen.classList.add(`screen--hidden`);
         screen.classList.remove(`active`);
       }
@@ -65,6 +71,7 @@ export default class FullPageScroll {
 
     this.screenElements[this.activeScreen].classList.remove(`screen--hidden`);
     this.screenElements[this.activeScreen].classList.add(`active`);
+    if (this.activeScreen === 1) body.classList.add("slide-1");
   }
 
   changeActiveMenuItem() {

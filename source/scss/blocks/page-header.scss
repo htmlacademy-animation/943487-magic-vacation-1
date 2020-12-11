@@ -37,7 +37,7 @@
   color: $c-light;
   transform: translateX(-10px);
   opacity: 0;
-  transition: .7s cubic-bezier(.33,.96,.53,.92) .3s;
+  transition: 0.7s cubic-bezier(0.33, 0.96, 0.53, 0.92) 0.3s;
 
   @media (min-width: $stop-scaling) {
     top: -5px;
@@ -140,7 +140,7 @@
   align-items: center;
   transform: translateX(10px);
   opacity: 0;
-  transition: .7s cubic-bezier(.33,.96,.53,.92) .5s;
+  transition: 0.7s cubic-bezier(0.33, 0.96, 0.53, 0.92) 0.5s;
 
   @media (max-width: $tablet) and (orientation: portrait) {
     position: fixed;
@@ -181,9 +181,20 @@
   }
 }
 
-.page-loaded .page-header__nav {
-  transform: none;
-  opacity: 1;
+.page-loaded {
+  .page-header__nav {
+    transform: none;
+    opacity: 1;
+
+    @media (max-width: $tablet) and (orientation: portrait) {
+      transform: translateX(-100%);
+      opacity: 1;
+    }
+  }
+
+  .page-header--menu-opened .page-header__nav {
+    transform: none;
+  }
 }
 
 .page-header__menu {
@@ -257,7 +268,7 @@
     display: block;
     color: inherit;
     padding: 0 0.5em 0.5em;
-    transition: .4s ease-in-out;
+    transition: 0.4s ease-in-out;
 
     &::after {
       content: "";
@@ -269,7 +280,7 @@
       display: block;
       width: 0;
       right: 0;
-      transition: width .4s ease-in-out;
+      transition: width 0.4s ease-in-out;
 
       @media (max-width: $tablet) and (orientation: portrait) {
         left: 0;
@@ -306,9 +317,9 @@
 }
 
 .page-loaded .page-header__menu a.active::after {
-    width: 100%;
-    left: 0;
-    transition-delay: .5s;
+  width: 100%;
+  left: 0;
+  transition-delay: 0.5s;
 }
 
 .page-header__social {
