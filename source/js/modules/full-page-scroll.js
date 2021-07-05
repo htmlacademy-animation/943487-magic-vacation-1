@@ -1,5 +1,8 @@
 import throttle from 'lodash/throttle';
 
+const historyPage = 1;
+const prizesPage = 2;
+
 export default class FullPageScroll {
   constructor() {
     this.THROTTLE_TIMEOUT = 2000;
@@ -41,6 +44,9 @@ export default class FullPageScroll {
 
   changeVisibilityDisplay() {
     let body = document.querySelector("body");
+    let prizeFirstSrc = "img/prize1.svg";
+    let prizeFirst = document.getElementById(`prizeFirst`);
+
     this.screenElements.forEach((screen) => {
       let prevScreenActive = document.querySelector(`.screen.active`);
       const screenChangeTimout = screen.classList.contains(`screen--story`) && this.screenElements[this.activeScreen].classList.contains(`screen--prizes`);
@@ -71,7 +77,8 @@ export default class FullPageScroll {
 
     this.screenElements[this.activeScreen].classList.remove(`screen--hidden`);
     this.screenElements[this.activeScreen].classList.add(`active`);
-    if (this.activeScreen === 1) body.classList.add("slide-1");
+    if (this.activeScreen === historyPage) body.classList.add("slide-1");
+    if (this.activeScreen === prizesPage) prizeFirst.src = prizeFirstSrc;
   }
 
   changeActiveMenuItem() {

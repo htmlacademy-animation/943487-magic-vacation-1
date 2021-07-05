@@ -169,6 +169,7 @@
   }
 
   &--cases {
+    display: none;
     margin-left: 7rem;
 
     @media (min-width: $stop-scaling) {
@@ -203,6 +204,7 @@
   }
 
   &--codes {
+    opacity: 0;
     @media (max-width: $tablet) and (orientation: portrait) {
       padding-left: 0.8rem;
     }
