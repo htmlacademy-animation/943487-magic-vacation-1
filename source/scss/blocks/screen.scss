@@ -100,7 +100,7 @@
 }
 
 .page-loaded .screen__footer-wrapper {
-  @media (max-width: $mobile) and (orientation: landscape) {
+  @media (min-width: $mobile) {
     opacity: 1;
     margin-bottom: 0;
   }
