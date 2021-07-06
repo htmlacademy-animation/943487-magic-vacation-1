@@ -45,7 +45,9 @@ export default class FullPageScroll {
   changeVisibilityDisplay() {
     let body = document.querySelector("body");
     let prizeFirstSrc = "img/prize1.svg";
+    let prizeSecondSrc = "img/prize2.svg";
     let prizeFirst = document.getElementById(`prizeFirst`);
+    let prizeSecond = document.getElementById(`prizeSecond`);
 
     this.screenElements.forEach((screen) => {
       let prevScreenActive = document.querySelector(`.screen.active`);
@@ -78,7 +80,10 @@ export default class FullPageScroll {
     this.screenElements[this.activeScreen].classList.remove(`screen--hidden`);
     this.screenElements[this.activeScreen].classList.add(`active`);
     if (this.activeScreen === historyPage) body.classList.add("slide-1");
-    if (this.activeScreen === prizesPage) prizeFirst.src = prizeFirstSrc;
+    if (this.activeScreen === prizesPage) {
+        prizeFirst.src = prizeFirstSrc;
+        prizeSecond.src = prizeSecondSrc;
+    };
   }
 
   changeActiveMenuItem() {
