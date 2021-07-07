@@ -46,8 +46,10 @@ export default class FullPageScroll {
     let body = document.querySelector("body");
     let prizeFirstSrc = "img/prize1.svg";
     let prizeSecondSrc = "img/prize2.svg";
+    let prizeThirdSrc = "img/prize3.svg"
     let prizeFirst = document.getElementById(`prizeFirst`);
     let prizeSecond = document.getElementById(`prizeSecond`);
+    let prizeThird = document.getElementById(`prizeThird`);
 
     this.screenElements.forEach((screen) => {
       let prevScreenActive = document.querySelector(`.screen.active`);
@@ -83,6 +85,7 @@ export default class FullPageScroll {
     if (this.activeScreen === prizesPage) {
         prizeFirst.src = prizeFirstSrc;
         prizeSecond.src = prizeSecondSrc;
+        prizeThird.src = prizeThirdSrc;
     };
   }
 
