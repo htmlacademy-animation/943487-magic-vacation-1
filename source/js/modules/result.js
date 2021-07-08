@@ -14,6 +14,14 @@ export default () => {
         });
         targetEl[0].classList.add(`screen--show`);
         targetEl[0].classList.remove(`screen--hidden`);
+
+        if (target === "result") {
+            document.querySelector(`#resultFirstAnimate`).beginElement();
+        } else if (target === "result2") {
+            document.querySelector(`#resultSecondAnimate`).beginElement();
+        } else if (target === "result3") {
+            document.querySelector(`#resultThirdAnimate`).beginElement();
+        }
       });
     }
 
