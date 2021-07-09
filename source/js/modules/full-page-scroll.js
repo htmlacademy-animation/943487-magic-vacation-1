@@ -1,10 +1,15 @@
 import throttle from 'lodash/throttle';
+import Timer from './timer.js';
 
 const historyPage = 1;
 const prizesPage = 2;
+const gamePage = 4;
 
 export default class FullPageScroll {
   constructor() {
+    const gameContainer = document.getElementById("timer");
+    this.gameTimer = new Timer(gameContainer);
+
     this.THROTTLE_TIMEOUT = 2000;
 
     this.screenElements = document.querySelectorAll(`.screen:not(.screen--result)`);
@@ -87,6 +92,7 @@ export default class FullPageScroll {
         prizeSecond.src = prizeSecondSrc;
         prizeThird.src = prizeThirdSrc;
     };
+    if (this.activeScreen === gamePage) this.gameTimer.startTimer();
   }
 
   changeActiveMenuItem() {
