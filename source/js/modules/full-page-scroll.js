@@ -1,5 +1,6 @@
 import throttle from 'lodash/throttle';
 import Timer from './timer.js';
+import NumbersTimer from './numbersTimer.js';
 
 const historyPage = 1;
 const prizesPage = 2;
@@ -9,6 +10,15 @@ export default class FullPageScroll {
   constructor() {
     const gameContainer = document.getElementById("timer");
     this.gameTimer = new Timer(gameContainer);
+
+    this.numberContainerFirst = document.getElementById("animate-number-1");
+    this.numberFirstTimer = new NumbersTimer(this.numberContainerFirst, 1, 3, 1);
+
+    this.numberContainerSecond = document.getElementById("animate-number-2");
+    this.numberSecondTimer = new NumbersTimer(this.numberContainerSecond, 1, 7, 1);
+
+    this.numberContainerThird = document.getElementById("animate-number-3");
+    this.numberThirdTimer = new NumbersTimer(this.numberContainerThird, 11, 900, 168);
 
     this.THROTTLE_TIMEOUT = 2000;
 
@@ -88,10 +98,23 @@ export default class FullPageScroll {
     this.screenElements[this.activeScreen].classList.add(`active`);
     if (this.activeScreen === historyPage) body.classList.add("slide-1");
     if (this.activeScreen === prizesPage) {
+        this.numberFirstTimer.startTimer();
+        this.numberContainerFirst.nextElementSibling.classList.add('text-right-animate');
+
         prizeFirst.src = prizeFirstSrc;
         prizeSecond.src = prizeSecondSrc;
         prizeThird.src = prizeThirdSrc;
-    };
+
+        setTimeout(() => {
+          this.numberSecondTimer.startTimer();
+          this.numberContainerSecond.nextElementSibling.classList.add('text-right-animate');
+        }, 2700);
+
+        setTimeout(() => {
+          this.numberThirdTimer.startTimer();
+          this.numberContainerThird.nextElementSibling.classList.add('text-right-animate');
+        }, 5300);
+    }
     if (this.activeScreen === gamePage) this.gameTimer.startTimer();
   }
 
