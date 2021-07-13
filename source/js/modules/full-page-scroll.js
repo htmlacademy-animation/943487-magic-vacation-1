@@ -12,13 +12,28 @@ export default class FullPageScroll {
     this.gameTimer = new Timer(gameContainer);
 
     this.numberContainerFirst = document.getElementById("animate-number-1");
-    this.numberFirstTimer = new NumbersTimer(this.numberContainerFirst, 1, 3, 1);
+    this.numberFirstTimer = new NumbersTimer({
+        numberContainer: this.numberContainerFirst, 
+        start: 1,
+        end: 3,
+        step: 1
+    });
 
     this.numberContainerSecond = document.getElementById("animate-number-2");
-    this.numberSecondTimer = new NumbersTimer(this.numberContainerSecond, 1, 7, 1);
+    this.numberSecondTimer = new NumbersTimer({
+        numberContainer: this.numberContainerSecond, 
+        start: 1,
+        end: 7,
+        step: 1
+    });
 
     this.numberContainerThird = document.getElementById("animate-number-3");
-    this.numberThirdTimer = new NumbersTimer(this.numberContainerThird, 11, 900, 168);
+    this.numberThirdTimer = new NumbersTimer({
+        numberContainer: this.numberContainerThird, 
+        start: 11,
+        end: 900,
+        step: 168
+    });
 
     this.THROTTLE_TIMEOUT = 2000;
 

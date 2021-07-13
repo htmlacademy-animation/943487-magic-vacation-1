@@ -1,9 +1,9 @@
 export default class NumbersTimer {
-  constructor(numberContainer, start, end, step) {
-    this._element = numberContainer;
-    this._startNumber = start;
-    this._endNumber = end;
-    this._step = step;
+  constructor(options) {
+    this._element = options.numberContainer;
+    this._startNumber = options.start;
+    this._endNumber = options.end;
+    this._step = options.step;
     this._currentNumber = this._startNumber;
     this._fpsInterval = 1000 / 10;
     this._then = Date.now();
