@@ -1,3 +1,5 @@
+import Scene2DSeaCalf from './canvas/result-first-animate.js';
+
 export default () => {
   let showResultEls = document.querySelectorAll(`.js-show-result`);
   let results = document.querySelectorAll(`.screen--result`);
@@ -17,6 +19,9 @@ export default () => {
 
         if (target === "result") {
             document.querySelector(`#resultFirstAnimate`).beginElement();
+            const canvasFirstResult = document.getElementById("sea-calf-scene");
+            const resultFirstAnimate = new Scene2DSeaCalf({canvas:canvasFirstResult});
+            resultFirstAnimate.startAnimation();
         } else if (target === "result2") {
             document.querySelector(`#resultSecondAnimate`).beginElement();
         } else if (target === "result3") {
