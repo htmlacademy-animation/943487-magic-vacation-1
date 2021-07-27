@@ -1,4 +1,5 @@
-import Scene2DSeaCalf from './canvas/result-first-animate.js';
+import Scene2DSeaCalf from './canvas/result-win-animate.js';
+import Scene2DCrocodile from './canvas/result-lose-animate.js';
 
 export default () => {
   let showResultEls = document.querySelectorAll(`.js-show-result`);
@@ -18,14 +19,17 @@ export default () => {
         targetEl[0].classList.remove(`screen--hidden`);
 
         if (target === "result") {
-            document.querySelector(`#resultFirstAnimate`).beginElement();
-            const canvasFirstResult = document.getElementById("sea-calf-scene");
-            const resultFirstAnimate = new Scene2DSeaCalf({canvas:canvasFirstResult});
-            resultFirstAnimate.startAnimation();
+            document.querySelector(`#resultWinAnimate`).beginElement();
+            const canvasWinResult = document.getElementById("sea-calf-scene");
+            const resultWinAnimate = new Scene2DSeaCalf({canvas:canvasWinResult});
+            resultWinAnimate.startAnimation();
         } else if (target === "result2") {
             document.querySelector(`#resultSecondAnimate`).beginElement();
         } else if (target === "result3") {
             document.querySelector(`#resultThirdAnimate`).beginElement();
+            const canvasLoseResult = document.getElementById("crocodile-scene");
+            const resultLoseAnimate = new Scene2DCrocodile({canvas:canvasLoseResult});
+            resultLoseAnimate.startAnimation();
         }
       });
     }
