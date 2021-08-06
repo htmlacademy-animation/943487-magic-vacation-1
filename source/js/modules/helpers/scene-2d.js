@@ -1,7 +1,7 @@
 export default class Scene2D {
   constructor(options) {
     this.canvas = options.canvas;
-    this.ctx = this.canvas.getContext("2d");
+    this.ctx = this.canvas.getContext(`2d`);
     this.setCanvasSize(1000, 1000);
     this.size = 1000;
     this.sceneObjects = options.sceneObjects;
@@ -14,7 +14,7 @@ export default class Scene2D {
 
     this.initObjects();
     this.initEventListeners();
-    window.addEventListener("resize", () => this.drawFullScreen());
+    window.addEventListener(`resize`, () => this.drawFullScreen());
   }
 
   initObjects() {
@@ -166,8 +166,8 @@ export default class Scene2D {
 
     canvas.width = width;
     canvas.height = height;
-    canvas.style.width = width + "px";
-    canvas.style.height = height + "px";
+    canvas.style.width = width + `px`;
+    canvas.style.height = height + `px`;
   }
 
   setScaleCanvas(size) {

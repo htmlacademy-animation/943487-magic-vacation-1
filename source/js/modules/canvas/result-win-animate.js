@@ -1,10 +1,10 @@
-import Animation from "../helpers/animations.js";
-import easing from "../helpers/easings.js";
-import Scene2D from "../helpers/scene-2d.js";
+import Animation from '../helpers/animations.js';
+import easing from '../helpers/easings.js';
+import Scene2D from '../helpers/scene-2d.js';
 
 const ice = {
-  objectId: "ice",
-  url: "./img/module-4/win-primary-images/ice.png",
+  objectId: `ice`,
+  url: `./img/module-4/win-primary-images/ice.png`,
   x: 50,
   y: 69,
   size: 49,
@@ -14,8 +14,8 @@ const ice = {
   },
 };
 const seaCalf = {
-  objectId: "seaCalf",
-  url: "./img/module-4/win-primary-images/sea-calf-2.png",
+  objectId: `seaCalf`,
+  url: `./img/module-4/win-primary-images/sea-calf-2.png`,
   x: 48,
   y: 60,
   size: 57,
@@ -25,8 +25,8 @@ const seaCalf = {
   },
 };
 const snowFlake1 = {
-  objectId: "snowFlake1",
-  url: "./img/module-4/win-primary-images/snowflake.png",
+  objectId: `snowFlake1`,
+  url: `./img/module-4/win-primary-images/snowflake.png`,
   x: 23,
   y: 55,
   size: 26,
@@ -36,8 +36,8 @@ const snowFlake1 = {
   },
 };
 const snowFlake2 = {
-  objectId: "snowFlake2",
-  url: "./img/module-4/win-primary-images/snowflake.png",
+  objectId: `snowFlake2`,
+  url: `./img/module-4/win-primary-images/snowflake.png`,
   x: 75,
   y: 65,
   size: 19,
@@ -48,8 +48,8 @@ const snowFlake2 = {
   },
 };
 const plane = {
-  objectId: "plane",
-  url: "./img/module-4/win-primary-images/airplane.png",
+  objectId: `plane`,
+  url: `./img/module-4/win-primary-images/airplane.png`,
   x: 95,
   y: 45,
   size: 15,
@@ -59,8 +59,8 @@ const plane = {
   },
 };
 const tree1 = {
-  objectId: "tree1",
-  url: "./img/module-4/win-primary-images/tree-2.png",
+  objectId: `tree1`,
+  url: `./img/module-4/win-primary-images/tree-2.png`,
   x: 60,
   y: 55,
   size: 5,
@@ -70,8 +70,8 @@ const tree1 = {
   },
 };
 const tree2 = {
-  objectId: "tree2",
-  url: "./img/module-4/win-primary-images/tree.png",
+  objectId: `tree2`,
+  url: `./img/module-4/win-primary-images/tree.png`,
   x: 64,
   y: 58,
   size: 4,
@@ -132,7 +132,7 @@ export default class Scene2DSeaCalf extends Scene2D {
 
     this.ctx.save();
     this.ctx.globalAlpha = blob.opacity;
-    this.ctx.fillStyle = "#acc3ff";
+    this.ctx.fillStyle = `#acc3ff`;
 
     this.ctx.beginPath();
     this.ctx.arc(
@@ -205,7 +205,7 @@ export default class Scene2DSeaCalf extends Scene2D {
             2 *
             Math.sin((1.5 * (details.currentTime - details.startTime)) / 1000);
         },
-        duration: "infinite",
+        duration: `infinite`,
       })
     );
 
@@ -217,7 +217,7 @@ export default class Scene2DSeaCalf extends Scene2D {
             Math.sin((1.5 * (details.currentTime - details.startTime)) / 1000);
         },
         delay: 700,
-        duration: "infinite",
+        duration: `infinite`,
       })
     );
 
@@ -318,7 +318,7 @@ export default class Scene2DSeaCalf extends Scene2D {
         func: () => {
           this.drawScene();
         },
-        duration: "infinite",
+        duration: `infinite`,
         fps: 60,
       })
     );
