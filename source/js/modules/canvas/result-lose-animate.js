@@ -1,10 +1,10 @@
-import Animation from "../helpers/animations.js";
-import easing from "../helpers/easings.js";
-import Scene2D from "../helpers/scene-2d.js";
+import Animation from '../helpers/animations.js';
+import easing from '../helpers/easings.js';
+import Scene2D from '../helpers/scene-2d.js';
 
 const crocodile = {
-  objectId: "crocodile",
-  url: "./img/module-4/lose-images/crocodile.png",
+  objectId: `crocodile`,
+  url: `./img/module-4/lose-images/crocodile.png`,
   x: 49.5,
   y: 60,
   size: 68,
@@ -15,8 +15,8 @@ const crocodile = {
   },
 };
 const drop = {
-  objectId: "drop",
-  url: "./img/module-4/lose-images/drop.png",
+  objectId: `drop`,
+  url: `./img/module-4/lose-images/drop.png`,
   x: 47,
   y: 62,
   size: 0,
@@ -24,8 +24,8 @@ const drop = {
   transforms: {},
 };
 const flamingo = {
-  objectId: "flamingo",
-  url: "./img/module-4/lose-images/flamingo.png",
+  objectId: `flamingo`,
+  url: `./img/module-4/lose-images/flamingo.png`,
   x: 31,
   y: 50,
   size: 0,
@@ -37,8 +37,8 @@ const flamingo = {
   },
 };
 const key = {
-  objectId: "key",
-  url: "./img/module-4/lose-images/key.png",
+  objectId: `key`,
+  url: `./img/module-4/lose-images/key.png`,
   x: 50,
   y: 55,
   size: 0,
@@ -46,8 +46,8 @@ const key = {
   transforms: {},
 };
 const leaf = {
-  objectId: "leaf",
-  url: "./img/module-4/lose-images/leaf.png",
+  objectId: `leaf`,
+  url: `./img/module-4/lose-images/leaf.png`,
   x: 75,
   y: 45,
   size: 0,
@@ -59,8 +59,8 @@ const leaf = {
   },
 };
 const saturn = {
-  objectId: "saturn",
-  url: "./img/module-4/lose-images/saturn.png",
+  objectId: `saturn`,
+  url: `./img/module-4/lose-images/saturn.png`,
   x: 75,
   y: 65,
   size: 0,
@@ -72,8 +72,8 @@ const saturn = {
   },
 };
 const snowflake = {
-  objectId: "snowflake",
-  url: "./img/module-4/lose-images/snowflake.png",
+  objectId: `snowflake`,
+  url: `./img/module-4/lose-images/snowflake.png`,
   x: 65,
   y: 55,
   size: 0,
@@ -85,8 +85,8 @@ const snowflake = {
   },
 };
 const watermelon = {
-  objectId: "watermelon",
-  url: "./img/module-4/lose-images/watermelon.png",
+  objectId: `watermelon`,
+  url: `./img/module-4/lose-images/watermelon.png`,
   x: 20,
   y: 65,
   size: 0,
@@ -527,7 +527,7 @@ export default class Scene2DCrocodile extends Scene2D {
         func: () => {
           this.drawScene();
         },
-        duration: "infinite",
+        duration: `infinite`,
         fps: 60,
       })
     );

@@ -18,16 +18,16 @@ export default () => {
         targetEl[0].classList.add(`screen--show`);
         targetEl[0].classList.remove(`screen--hidden`);
 
-        if (target === "result") {
+        if (target === `result`) {
             document.querySelector(`#resultWinAnimate`).beginElement();
-            const canvasWinResult = document.getElementById("sea-calf-scene");
+            const canvasWinResult = document.getElementById(`sea-calf-scene`);
             const resultWinAnimate = new Scene2DSeaCalf({canvas:canvasWinResult});
             resultWinAnimate.startAnimation();
-        } else if (target === "result2") {
+        } else if (target === `result2`) {
             document.querySelector(`#resultSecondAnimate`).beginElement();
-        } else if (target === "result3") {
+        } else if (target === `result3`) {
             document.querySelector(`#resultThirdAnimate`).beginElement();
-            const canvasLoseResult = document.getElementById("crocodile-scene");
+            const canvasLoseResult = document.getElementById(`crocodile-scene`);
             const resultLoseAnimate = new Scene2DCrocodile({canvas:canvasLoseResult});
             resultLoseAnimate.startAnimation();
         }

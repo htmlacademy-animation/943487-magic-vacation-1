@@ -310,20 +310,6 @@
   opacity: 1;
 }
 
-.screen--story {
-  background-color: $c-dark;
-  background-image: url("../img/slide1.jpg"), url("../img/slide2.jpg"),
-    url("../img/slide3.jpg"), url("../img/slide4.jpg");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-
-  @media (orientation: portrait) {
-    background-size: auto calc(100vh - 13.8rem), 100% 25rem;
-    background-position: top center, bottom center;
-  }
-}
-
 .screen--prizes {
   z-index: 3;
 }
@@ -377,3 +363,7 @@
 .screen--rules {
   background-color: $c-dark;
 }
+
+.screen__canvas {
+    position: absolute;
+}  
