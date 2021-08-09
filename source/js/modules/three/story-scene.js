@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import customRawShaderMaterial from '../helpers/custom-raw-shader-material.js';
 
 export default class Story {
   constructor() {
@@ -52,9 +53,9 @@ export default class Story {
     manager.onLoad = () => {
       loaderTextures.forEach((texture, positionX) => {
         const geometry = new THREE.PlaneGeometry(1, 1);
-        const material = new THREE.MeshBasicMaterial({ map: texture });
-        let image = new THREE.Mesh(geometry, material);
+        const material = new THREE.RawShaderMaterial(customRawShaderMaterial(texture));
 
+        let image = new THREE.Mesh(geometry, material);
         image.scale.x = this.textureWidth;
         image.scale.y = this.textureHeight;
         image.position.x = this.textureWidth * positionX;
