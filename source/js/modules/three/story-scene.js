@@ -1,4 +1,4 @@
-import * as THREE from "three";
+import * as THREE from 'three';
 import customRawShaderMaterial from '../helpers/custom-raw-shader-material.js';
 
 export default class Story {
@@ -8,10 +8,22 @@ export default class Story {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
     this.attTextures = [
-      `./img/module-5/scenes-textures/scene-1.png`,
-      `./img/module-5/scenes-textures/scene-2.png`,
-      `./img/module-5/scenes-textures/scene-3.png`,
-      `./img/module-5/scenes-textures/scene-4.png`,
+      {
+        src: `./img/module-5/scenes-textures/scene-1.png`,
+        options: { hue: 0.0 },
+      },
+      {
+        src: `./img/module-5/scenes-textures/scene-2.png`,
+        options: { hue: -0.2 },
+      },
+      {
+        src: `./img/module-5/scenes-textures/scene-3.png`,
+        options: { hue: 0.0 },
+      },
+      {
+        src: `./img/module-5/scenes-textures/scene-4.png`,
+        options: { hue: 0.0 },
+      },
     ];
     this.textureWidth = 2048;
     this.textureHeight = 1024;
@@ -48,12 +60,17 @@ export default class Story {
 
     const manager = new THREE.LoadingManager();
     const loader = new THREE.TextureLoader(manager);
-    const loaderTextures = this.attTextures.map((texture) => loader.load(texture));
+    const loaderTextures = this.attTextures.map((texture) => ({
+      src: loader.load(texture.src),
+      options: texture.options,
+    }));
 
     manager.onLoad = () => {
       loaderTextures.forEach((texture, positionX) => {
         const geometry = new THREE.PlaneGeometry(1, 1);
-        const material = new THREE.RawShaderMaterial(customRawShaderMaterial(texture));
+        const material = new THREE.RawShaderMaterial(
+          customRawShaderMaterial(texture.src, texture.options)
+        );
 
         let image = new THREE.Mesh(geometry, material);
         image.scale.x = this.textureWidth;
