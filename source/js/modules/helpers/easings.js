@@ -50,7 +50,7 @@ function easeOutElastic(x) {
   }
 }
 
-const _ = Object.freeze({
+const easing = Object.freeze({
   easeLinear,
   easeInCubic,
   easeOutCubic,
@@ -60,4 +60,4 @@ const _ = Object.freeze({
   easeOutElastic,
 });
 
-export default _;
+export default easing;
