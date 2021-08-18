@@ -32,10 +32,17 @@ export default class Story {
 
     this.canvasCenter = { x: this.width / 2, y: this.height / 2 };
 
+    this.bubbleGlareOffset = 0.8;
+    this.bubbleGlareStartRadianAngle = 2;
+    this.bubbleGlareEndRadianAngle = 2.7;
+    
     this.bubblesDuration = 3000;
     this.bubbles = [
       {
         radius: 80.0,
+        glareAngleStart: this.bubbleGlareStartRadianAngle,
+        glareAngleEnd: this.bubbleGlareEndRadianAngle,
+        glareOffset: this.bubbleGlareOffset,
         initialPosition: [this.canvasCenter.x - this.canvasCenter.x / 10, -100],
         position: [this.canvasCenter.x - this.canvasCenter.x / 10, -100],
         finalPosition: [
@@ -47,6 +54,9 @@ export default class Story {
       },
       {
         radius: 60.0,
+        glareAngleStart: this.bubbleGlareStartRadianAngle,
+        glareAngleEnd: this.bubbleGlareEndRadianAngle,
+        glareOffset: this.bubbleGlareOffset,
         initialPosition: [this.canvasCenter.x - this.width / 4, -100],
         position: [this.canvasCenter.x - this.width / 4, -100],
         finalPosition: [
@@ -58,6 +68,9 @@ export default class Story {
       },
       {
         radius: 40.0,
+        glareAngleStart: this.bubbleGlareStartRadianAngle,
+        glareAngleEnd: this.bubbleGlareEndRadianAngle,
+        glareOffset: this.bubbleGlareOffset,
         initialPosition: [this.canvasCenter.x, -100],
         position: [this.canvasCenter.x, -100],
         finalPosition: [this.canvasCenter.x, this.height + 100],
