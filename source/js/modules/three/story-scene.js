@@ -1,6 +1,9 @@
 import * as THREE from 'three';
 import customRawShaderMaterial from '../helpers/custom-raw-shader-material.js';
 import paramAnimate from '../helpers/param-animate.js';
+import easing from '../helpers/easings.js';
+
+const easeInOut = easing.bezier(0.4, 0, 0.6, 1);
 
 export default class Story {
   constructor() {
@@ -8,7 +11,7 @@ export default class Story {
     this.alpha = 1;
     this.width = window.innerWidth;
     this.height = window.innerHeight;
-    this.attTextures = [
+    this.arrTextures = [
       {
         src: `./img/module-5/scenes-textures/scene-1.png`,
         options: { hue: 0.0 },
@@ -16,6 +19,14 @@ export default class Story {
       {
         src: `./img/module-5/scenes-textures/scene-2.png`,
         options: { hue: -0.2, magnify: true },
+        animationSettings: {
+          hue: {
+            initalHue: 0.1,
+            finalHue: -0.2,
+            duration: 2000,
+            variation: 0.3,
+          },
+        },
       },
       {
         src: `./img/module-5/scenes-textures/scene-3.png`,
@@ -30,12 +41,14 @@ export default class Story {
     this.textureHeight = 1024;
     this.cameraAspectRatio = this.width / this.height;
 
+    this.activeScene = 0;
+
     this.canvasCenter = { x: this.width / 2, y: this.height / 2 };
 
     this.bubbleGlareOffset = 0.8;
     this.bubbleGlareStartRadianAngle = 2;
     this.bubbleGlareEndRadianAngle = 2.7;
-    
+
     this.bubblesDuration = 3000;
     this.bubbles = [
       {
@@ -78,11 +91,72 @@ export default class Story {
         timeout: this.bubblesDuration / 4,
       },
     ];
+    
+    this.hueIsAnimation = false;
+    this.defaultHueIntensityEasingFn = (timingFraction) => {
+      return easeInOut(Math.sin(timingFraction * Math.PI));
+    };
+    this.animateHue = this.animateHue.bind(this);
+    this.getHueAnimationSettings = this.getHueAnimationSettings.bind(this);
 
     this.animationRequest = null;
 
     this.render = this.render.bind(this);
     this.updateSize = this.updateSize.bind(this);
+  }
+
+  resetHue() {
+    const hueAnimationSettings = this.getHueAnimationSettings(this.activeScene);
+    if (!hueAnimationSettings) {
+      return;
+    }
+
+    this.arrTextures[this.activeScene].options.hue =
+      hueAnimationSettings.initalHue;
+  }
+
+  getHueAnimationSettings(sceneID) {
+    const texture = this.arrTextures[sceneID];
+
+    return texture.animationSettings && texture.animationSettings.hue;
+  }
+
+  hueIntensityAnimationTick(sceneID, from, to) {
+    return (progress) => {
+      const hueAnimationSettings = this.getHueAnimationSettings(sceneID);
+      if (!hueAnimationSettings) {
+        this.arrTextures[sceneID].options.hue = hueAnimationSettings.initalHue;
+        return;
+      }
+
+      const hueShift = paramAnimate.tick(from, to, progress);
+      this.arrTextures[sceneID].options.hue = hueShift;
+    };
+  }
+
+  animateHue() {
+    const hueAnimationSettings = this.getHueAnimationSettings(this.activeScene);
+    if (!hueAnimationSettings) {
+      this.hueIsAnimation = false;
+      return;
+    }
+
+    this.hueIsAnimation = true;
+
+    const { initalHue, finalHue, duration, variation } = hueAnimationSettings;
+    const offset = Math.random() * variation * 2 + (1 - variation);
+
+    paramAnimate
+      .animateWithFPS(
+        this.hueIntensityAnimationTick(
+          this.activeScene,
+          initalHue,
+          finalHue * offset
+        ),
+        duration * offset,
+        this.defaultHueIntensityEasingFn
+      )
+      .then(this.animateHue);
   }
 
   resetBubbles() {
@@ -97,7 +171,7 @@ export default class Story {
     const { width } = this.renderer.getSize();
     const pixelRatio = this.renderer.getPixelRatio();
 
-    if (this.attTextures[sceneID].options.magnify) {
+    if (this.arrTextures[sceneID].options.magnify) {
       return {
         magnification: {
           value: {
@@ -172,7 +246,7 @@ export default class Story {
 
     const manager = new THREE.LoadingManager();
     const loader = new THREE.TextureLoader(manager);
-    const loaderTextures = this.attTextures.map((texture) => ({
+    const loaderTextures = this.arrTextures.map((texture) => ({
       src: loader.load(texture.src),
       options: texture.options,
     }));
@@ -202,6 +276,7 @@ export default class Story {
       });
     };
 
+    this.renderScene(0);
     this.animationRequest = requestAnimationFrame(this.render);
   }
 
@@ -214,11 +289,19 @@ export default class Story {
   }
 
   renderScene(sceneID) {
+    this.activeScene = sceneID;
     this.camera.position.x = this.textureWidth * sceneID;
 
-    if (this.attTextures[sceneID].options.magnify) {
+    if (this.arrTextures[sceneID].options.magnify) {
       this.resetBubbles();
       this.animateBubbles();
+    }
+
+    if (this.getHueAnimationSettings(sceneID)) {
+      if (!this.hueIsAnimation) {
+        this.resetHue();
+        this.animateHue();
+      }
     }
 
     this.render();
