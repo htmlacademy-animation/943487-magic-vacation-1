@@ -3,7 +3,7 @@ import customRawShaderMaterial from '../helpers/custom-raw-shader-material.js';
 import paramAnimate from '../helpers/param-animate.js';
 import easing from '../helpers/easings.js';
 
-const easeInOut = easing.bezier(0.4, 0, 0.6, 1);
+const easeInOut = easing.bezier(0.4, 0, 1, 1);
 
 export default class Story {
   constructor() {
@@ -56,13 +56,13 @@ export default class Story {
         glareAngleStart: this.bubbleGlareStartRadianAngle,
         glareAngleEnd: this.bubbleGlareEndRadianAngle,
         glareOffset: this.bubbleGlareOffset,
-        initialPosition: [this.canvasCenter.x - this.canvasCenter.x / 10, -100],
-        position: [this.canvasCenter.x - this.canvasCenter.x / 10, -100],
+        initialPosition: [this.canvasCenter.x - this.canvasCenter.x / 8, -100],
+        position: [this.canvasCenter.x - this.canvasCenter.x / 8, -100],
         finalPosition: [
-          this.canvasCenter.x - this.canvasCenter.x / 10,
+          this.canvasCenter.x - this.canvasCenter.x / 8,
           this.height + 80,
         ],
-        positionAmplitude: 50,
+        positionAmplitude: 70,
         timeout: 0,
       },
       {
@@ -70,13 +70,13 @@ export default class Story {
         glareAngleStart: this.bubbleGlareStartRadianAngle,
         glareAngleEnd: this.bubbleGlareEndRadianAngle,
         glareOffset: this.bubbleGlareOffset,
-        initialPosition: [this.canvasCenter.x - this.width / 4, -100],
-        position: [this.canvasCenter.x - this.width / 4, -100],
+        initialPosition: [this.canvasCenter.x - this.width / 6, -100],
+        position: [this.canvasCenter.x - this.width / 6, -100],
         finalPosition: [
-          this.canvasCenter.x - this.width / 4,
+          this.canvasCenter.x - this.width / 6,
           this.height + 60,
         ],
-        positionAmplitude: 40,
+        positionAmplitude: 60,
         timeout: this.bubblesDuration / 5,
       },
       {
@@ -87,8 +87,8 @@ export default class Story {
         initialPosition: [this.canvasCenter.x, -100],
         position: [this.canvasCenter.x, -100],
         finalPosition: [this.canvasCenter.x, this.height + 100],
-        positionAmplitude: 30,
-        timeout: this.bubblesDuration / 4,
+        positionAmplitude: 50,
+        timeout: this.bubblesDuration / 3,
       },
     ];
     
@@ -195,8 +195,8 @@ export default class Story {
       const y = paramAnimate.tick(from[1], to[1], progress) * pixelRatio;
       const offset =
         this.bubbles[sceneID].positionAmplitude *
-        Math.pow(1 - progress, 0.5) *
-        Math.sin(progress * Math.PI * 10);
+        Math.pow(1 - progress, 0.8) *
+        Math.sin(progress * Math.PI * 7);
       const x =
         (offset + this.bubbles[sceneID].initialPosition[0]) * pixelRatio;
 

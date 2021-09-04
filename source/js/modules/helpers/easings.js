@@ -1,10 +1,3 @@
-/**
- * https://github.com/gre/bezier-easing
- * BezierEasing - use bezier curve for transition easing function
- * by Gaëtan Renaudeau 2014 - 2015 – MIT License
- */
-
-// These values are established by empiricism with tests (tradeoff: performance VS precision)
 let NEWTON_ITERATIONS = 4;
 let NEWTON_MIN_SLOPE = 0.001;
 let SUBDIVISION_PRECISION = 0.0000001;
