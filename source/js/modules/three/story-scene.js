@@ -40,6 +40,9 @@ export default class Story {
     this.textureWidth = 2048;
     this.textureHeight = 1024;
     this.cameraAspectRatio = this.width / this.height;
+    this.position = {
+        z: 750,
+      };
 
     this.activeScene = 0;
 
@@ -73,9 +76,9 @@ export default class Story {
         initialPosition: [this.canvasCenter.x - this.width / 6, -100],
         position: [this.canvasCenter.x - this.width / 6, -100],
         finalPosition: [
-          this.canvasCenter.x - this.width / 6,
-          this.height + 60,
-        ],
+            this.canvasCenter.x - this.width / 6,
+            this.height + 60,
+          ],
         positionAmplitude: 60,
         timeout: this.bubblesDuration / 5,
       },
@@ -91,7 +94,39 @@ export default class Story {
         timeout: this.bubblesDuration / 3,
       },
     ];
-    
+
+    this.lights = [
+      {
+        id: `DirectionalLight`,
+        type: `DirectionalLight`,
+        color: `rgb(255,255,255)`,
+        intensity: 0.84,
+        position: {
+          x: 0,
+          y: this.position.z * Math.tan(-15 * THREE.Math.DEG2RAD),
+          z: this.position.z,
+        },
+      },
+      {
+        id: `PointLight-0`,
+        type: `PointLight`,
+        color: `rgb(246,242,255)`,
+        intensity: 0.6,
+        decay: 2.0,
+        distance: 975,
+        position: { x: -785, y: -350, z: 710 },
+      },
+      {
+        id: `PointLight-1`,
+        type: `PointLight`,
+        color: `rgb(245,254,255)`,
+        intensity: 0.95,
+        decay: 2.0,
+        distance: 975,
+        position: { x: 730, y: 800, z: 985 },
+      },
+    ];
+
     this.hueIsAnimation = false;
     this.defaultHueIntensityEasingFn = (timingFraction) => {
       return easeInOut(Math.sin(timingFraction * Math.PI));
@@ -218,6 +253,33 @@ export default class Story {
       }, this.bubbles[sceneID].timeout);
     });
   }
+  
+  setSphere() {
+    const geometry = new THREE.SphereGeometry(100, 50, 50);
+
+    const material = new THREE.MeshStandardMaterial({
+      color: new THREE.Color(`#F1354C`),
+      metalness: 0.05,
+      emissive: 0x0,
+      roughness: 0.5
+    });
+
+    return new THREE.Mesh(geometry, material);
+  }
+
+  setLights() {
+    const lightGroup = new THREE.Group();
+
+    this.lights.forEach((light) => {
+      const color = new THREE.Color(light.color);
+
+      const lightUnit = new THREE[light.type](color, light.intensity, light.distance, light.decay);
+      lightUnit.position.set(...Object.values(light.position));
+      lightGroup.add(lightUnit);
+    });
+
+    return lightGroup;
+  }
 
   initScene() {
     window.addEventListener(`resize`, this.updateSize);
@@ -275,6 +337,13 @@ export default class Story {
         this.render();
       });
     };
+
+    const sphere = this.setSphere();
+    this.scene.add(sphere);
+
+    const light = this.setLights();
+    light.position.z = this.camera.position.z;
+    this.scene.add(light);
 
     this.renderScene(0);
     this.animationRequest = requestAnimationFrame(this.render);
