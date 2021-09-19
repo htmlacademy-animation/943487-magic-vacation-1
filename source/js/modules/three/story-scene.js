@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import customRawShaderMaterial from '../helpers/custom-raw-shader-material.js';
 import paramAnimate from '../helpers/param-animate.js';
 import easing from '../helpers/easings.js';
+import SecondRoomStory from './story-scene/second-room.js';
+import ThirdRoomStory from './story-scene/third-room.js';
 
 const easeInOut = easing.bezier(0.4, 0, 1, 1);
 
@@ -27,10 +29,14 @@ export default class Story {
             variation: 0.3,
           },
         },
+        room: SecondRoomStory,
+        roomScale: { x: 3, y: 3, z: 3 },
+        roomPosition: { y: 250 },
       },
       {
         src: `./img/module-5/scenes-textures/scene-3.png`,
         options: { hue: 0.0 },
+        room: ThirdRoomStory,
       },
       {
         src: `./img/module-5/scenes-textures/scene-4.png`,
@@ -41,8 +47,8 @@ export default class Story {
     this.textureHeight = 1024;
     this.cameraAspectRatio = this.width / this.height;
     this.position = {
-        z: 750,
-      };
+      z: 750,
+    };
 
     this.activeScene = 0;
 
@@ -106,6 +112,13 @@ export default class Story {
           y: this.position.z * Math.tan(-15 * THREE.Math.DEG2RAD),
           z: this.position.z,
         },
+      },
+      {
+        id: `DirectionalLight-1`,
+        type: `DirectionalLight`,
+        color: `rgb(255,255,255)`,
+        intensity: 0.5,
+        position: {x: 0, y: 500, z: 0},
       },
       {
         id: `PointLight-0`,
@@ -254,18 +267,18 @@ export default class Story {
     });
   }
   
-  setSphere() {
-    const geometry = new THREE.SphereGeometry(100, 50, 50);
+//   setSphere() {
+//     const geometry = new THREE.SphereGeometry(100, 50, 50);
 
-    const material = new THREE.MeshStandardMaterial({
-      color: new THREE.Color(`#F1354C`),
-      metalness: 0.05,
-      emissive: 0x0,
-      roughness: 0.5
-    });
+//     const material = new THREE.MeshStandardMaterial({
+//       color: new THREE.Color(`#F1354C`),
+//       metalness: 0.05,
+//       emissive: 0x0,
+//       roughness: 0.5
+//     });
 
-    return new THREE.Mesh(geometry, material);
-  }
+//     return new THREE.Mesh(geometry, material);
+//   }
 
   setLights() {
     const lightGroup = new THREE.Group();
@@ -309,8 +322,8 @@ export default class Story {
     const manager = new THREE.LoadingManager();
     const loader = new THREE.TextureLoader(manager);
     const loaderTextures = this.arrTextures.map((texture) => ({
+      ...texture,
       src: loader.load(texture.src),
-      options: texture.options,
     }));
 
     manager.onLoad = () => {
@@ -334,12 +347,30 @@ export default class Story {
         image.position.x = this.textureWidth * positionX;
 
         this.scene.add(image);
+
+        if (texture.room) {
+          const Room = texture.room;
+
+          const roomElements = new Room();
+          roomElements.position.x = this.textureWidth * positionX;
+
+          if (texture.roomScale) {
+            roomElements.scale.set(texture.roomScale.x, texture.roomScale.y, texture.roomScale.z);
+          }
+
+          if (texture.roomPosition) {
+            roomElements.position.y = texture.roomPosition.y;
+          }
+
+          this.scene.add(roomElements);
+        }
+
         this.render();
       });
     };
 
-    const sphere = this.setSphere();
-    this.scene.add(sphere);
+    // const sphere = this.setSphere();
+    // this.scene.add(sphere);
 
     const light = this.setLights();
     light.position.z = this.camera.position.z;
