@@ -50,10 +50,13 @@ const animateWithFPS = (render, duration, easing, fps = 1000 / 25) =>
     requestAnimationFrame(loop);
   });
 
+const coneRadius = (width) => Math.hypot(width, width) / 2;
+
 const paramAnimate = Object.freeze({
   tick,
   animateProgress,
   animateWithFPS,
+  coneRadius,
 });
 
 export default paramAnimate;
