@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import SVGObject from '../svg-object/SVGObject.js';
 import Pyramid from './pyramid.js';
 import Lantern from './lantern.js';
 
@@ -23,12 +24,13 @@ class SecondRoomStory extends THREE.Group {
   constructChildren() {
     this.addPyramid();
     this.addLantern();
+    this.addLeaf();
   }
 
   addPyramid() {
     const pyramid = new Pyramid();
 
-    pyramid.position.set(-13, 0, -110); 
+    pyramid.position.set(-13, 0, -110);
     pyramid.rotation.copy(
       new THREE.Euler(5 * THREE.Math.DEG2RAD, 3 * THREE.Math.DEG2RAD, 0),
       `XYZ`
@@ -46,6 +48,13 @@ class SecondRoomStory extends THREE.Group {
     );
     lantern.position.set(115, -150, 10);
     this.add(lantern);
+  }
+
+  async addLeaf() {
+    const leaf = await new SVGObject({ name: `leaf-2` }).getObject();
+    leaf.position.set(-200, 100, 30);
+    leaf.scale.set(1.5, 1.5, 1.5);
+    this.add(leaf);
   }
 }
 

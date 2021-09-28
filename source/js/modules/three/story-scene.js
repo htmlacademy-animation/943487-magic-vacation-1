@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import customRawShaderMaterial from '../helpers/custom-raw-shader-material.js';
 import paramAnimate from '../helpers/param-animate.js';
 import easing from '../helpers/easings.js';
+
+import FirstRoomStory from './story-scene/first-room.js';
 import SecondRoomStory from './story-scene/second-room.js';
 import ThirdRoomStory from './story-scene/third-room.js';
 
@@ -17,6 +19,7 @@ export default class Story {
       {
         src: `./img/module-5/scenes-textures/scene-1.png`,
         options: { hue: 0.0 },
+        room: FirstRoomStory,
       },
       {
         src: `./img/module-5/scenes-textures/scene-2.png`,
@@ -147,6 +150,7 @@ export default class Story {
     this.animateHue = this.animateHue.bind(this);
     this.getHueAnimationSettings = this.getHueAnimationSettings.bind(this);
 
+    this.initialized = false;
     this.animationRequest = null;
 
     this.render = this.render.bind(this);
@@ -266,19 +270,19 @@ export default class Story {
       }, this.bubbles[sceneID].timeout);
     });
   }
-  
-//   setSphere() {
-//     const geometry = new THREE.SphereGeometry(100, 50, 50);
 
-//     const material = new THREE.MeshStandardMaterial({
-//       color: new THREE.Color(`#F1354C`),
-//       metalness: 0.05,
-//       emissive: 0x0,
-//       roughness: 0.5
-//     });
+  //   setSphere() {
+  //     const geometry = new THREE.SphereGeometry(100, 50, 50);
 
-//     return new THREE.Mesh(geometry, material);
-//   }
+  //     const material = new THREE.MeshStandardMaterial({
+  //       color: new THREE.Color(`#F1354C`),
+  //       metalness: 0.05,
+  //       emissive: 0x0,
+  //       roughness: 0.5
+  //     });
+
+  //     return new THREE.Mesh(geometry, material);
+  //   }
 
   setLights() {
     const lightGroup = new THREE.Group();
@@ -295,8 +299,17 @@ export default class Story {
   }
 
   initScene() {
+    if (!this.initialized) {
+      this.prepareScene();
+      this.initialized = true;
+    }
+
     window.addEventListener(`resize`, this.updateSize);
 
+    this.animationRequest = requestAnimationFrame(this.render);
+  }
+
+  prepareScene() {
     this.canvas = document.getElementById(`story-scene`);
     this.canvas.width = this.width;
     this.canvas.height = this.height;
@@ -377,7 +390,7 @@ export default class Story {
     this.scene.add(light);
 
     this.renderScene(0);
-    this.animationRequest = requestAnimationFrame(this.render);
+    // this.animationRequest = requestAnimationFrame(this.render);
   }
 
   render() {
