@@ -75,7 +75,7 @@ export default () => {
     if (storySlider) {
       storySlider.destroy();
     }
-    storyScene.renderScene(0);
+    // storyScene.renderScene(0);
     setSlider();
   });
 
