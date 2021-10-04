@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import paramAnimate from '../../helpers/param-animate.js';
+import paramAnimate from '../../../helpers/param-animate.js';
 
 class Pyramid extends THREE.Group {
   constructor() {

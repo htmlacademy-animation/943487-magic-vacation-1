@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import SVGObject from '../svg-object/SVGObject.js';
+import SVGObject from '../../svg-object/SVGObject.js';
 import Pyramid from './pyramid.js';
 import Lantern from './lantern.js';
 

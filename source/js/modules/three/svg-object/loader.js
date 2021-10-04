@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js';
-import awaitLoader from './await-loader.js';
+import {awaitLoader} from '../helpers.js';
 
 const svgLoader = new SVGLoader();
 
