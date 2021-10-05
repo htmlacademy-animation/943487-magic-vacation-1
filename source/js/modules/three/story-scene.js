@@ -3,9 +3,10 @@ import customRawShaderMaterial from '../helpers/custom-raw-shader-material.js';
 import paramAnimate from '../helpers/param-animate.js';
 import easing from '../helpers/easings.js';
 
-import FirstRoomStory from './story-scene/first-room.js';
-import SecondRoomStory from './story-scene/second-room.js';
-import ThirdRoomStory from './story-scene/third-room.js';
+import FirstRoomStory from './story-scene/first-room/first-room.js';
+import SecondRoomStory from './story-scene/second-room/second-room.js';
+import ThirdRoomStory from './story-scene/third-room/third-room.js';
+import FourthRoomStory from './story-scene/fourth-room/fourth-room.js';
 
 const easeInOut = easing.bezier(0.4, 0, 1, 1);
 
@@ -44,6 +45,7 @@ export default class Story {
       {
         src: `./img/module-5/scenes-textures/scene-4.png`,
         options: { hue: 0.0 },
+        room: FourthRoomStory,
       },
     ];
     this.textureWidth = 2048;

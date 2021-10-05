@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import Snowman from './snowman.js';
+import Road from './road.js';
 
 class ThirdRoomStory extends THREE.Group {
   constructor() {
@@ -14,7 +15,13 @@ class ThirdRoomStory extends THREE.Group {
       });
     };
 
+    this.constructChildren = this.constructChildren.bind(this);
+    this.constructChildren();
+  }
+
+  constructChildren() {
     this.addSnowman();
+    this.addRoad();
   }
 
   addSnowman() {
@@ -27,6 +34,14 @@ class ThirdRoomStory extends THREE.Group {
     );
     snowman.position.set(-130, -120, 0);
     this.add(snowman);
+  }
+
+  addRoad() {
+    const road = new Road();
+    road.scale.set(0.7, 0.7, 0.7);
+    road.position.set(-20, 0, 40);
+    road.rotation.copy(new THREE.Euler(20 * THREE.Math.DEG2RAD, 45 * THREE.Math.DEG2RAD, 180 * THREE.Math.DEG2RAD), `XYZ`);
+    this.add(road);
   }
 }
 
