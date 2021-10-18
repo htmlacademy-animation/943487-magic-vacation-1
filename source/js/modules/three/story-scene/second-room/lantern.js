@@ -1,31 +1,24 @@
 import * as THREE from 'three';
 import paramAnimate from '../../../helpers/param-animate.js';
+import colors from '../../../helpers/colors.js';
+import materialReflectivity from '../../../helpers/material-reflectivity';
 
 class Lantern extends THREE.Group {
   constructor() {
     super();
 
-    this.getMaterial = (options = {}) => {
-      const { color, ...rest } = options;
-
-      return new THREE.MeshStandardMaterial({
-        color: new THREE.Color(color),
-        ...rest,
-      });
-    };
-
     this.cylinder = {
       height: 120,
       radius: 16,
       radialSegments: 20,
-      color: `#1271F3`,
+      color: colors.Blue,
     };
 
     this.sphere = {
       height: 16,
       radius: 16,
       segments: 20,
-      color: `#1271F3`,
+      color: colors.Blue,
     };
 
     this.centreCylinder = {
@@ -38,14 +31,14 @@ class Lantern extends THREE.Group {
     this.box = {
       width: 37,
       height: 4,
-      color: `#1271F3`,
+      color: colors.Blue,
     };
 
     this.topTrapezoid = {
       widthTop: 42,
       widthBottom: 34,
       height: 60,
-      color: `#90B0F9`,
+      color: colors.LightBlue,
       radialSegments: 4,
     };
 
@@ -53,7 +46,7 @@ class Lantern extends THREE.Group {
       widthTop: 45,
       widthBottom: 57,
       height: 6,
-      color: `#1271F3`,
+      color: colors.Blue,
       radialSegments: 4,
     };
 
@@ -71,6 +64,15 @@ class Lantern extends THREE.Group {
     this.addTop();
   }
 
+  getMaterial(options = {}) {
+    const {color, ...rest} = options;
+
+    return new THREE.MeshStandardMaterial({
+      color: new THREE.Color(color),
+      ...rest,
+    });
+  }
+
   addBase() {
     this.base = new THREE.Group();
 
@@ -80,10 +82,10 @@ class Lantern extends THREE.Group {
       this.cylinder.height,
       this.cylinder.radialSegments
     );
-    const cylinderMesh = new THREE.Mesh(
-      cylinder,
-      this.getMaterial({ color: this.cylinder.color })
-    );
+    const cylinderMesh = new THREE.Mesh(cylinder, this.getMaterial({
+        color: this.cylinder.color,
+        ...materialReflectivity.soft,
+      }));
 
     const halfSphere = new THREE.SphereBufferGeometry(
       this.sphere.radius,
@@ -94,10 +96,10 @@ class Lantern extends THREE.Group {
       0,
       Math.PI * 0.5
     );
-    const halfSphereMesh = new THREE.Mesh(
-      halfSphere,
-      this.getMaterial({ color: this.sphere.color })
-    );
+    const halfSphereMesh = new THREE.Mesh(halfSphere, this.getMaterial({
+        color: this.sphere.color,
+        ...materialReflectivity.soft,
+      }));
 
     this.base.add(cylinderMesh);
     this.base.add(halfSphereMesh);
@@ -138,10 +140,11 @@ class Lantern extends THREE.Group {
       this.box.height,
       this.box.width
     );
-    const boxMesh = new THREE.Mesh(
-      box,
-      this.getMaterial({ color: this.box.color, flatShading: true })
-    );
+    const boxMesh = new THREE.Mesh(box, this.getMaterial({
+        color: this.box.color,
+        flatShading: true,
+        ...materialReflectivity.soft,
+      }));
 
     const trapezoid = new THREE.CylinderBufferGeometry(
       paramAnimate.coneRadius(this.topTrapezoid.widthTop),
@@ -149,10 +152,11 @@ class Lantern extends THREE.Group {
       this.topTrapezoid.height,
       this.topTrapezoid.radialSegments
     );
-    const trapezoidMesh = new THREE.Mesh(
-      trapezoid,
-      this.getMaterial({ color: this.topTrapezoid.color, flatShading: true })
-    );
+    const trapezoidMesh = new THREE.Mesh(trapezoid, this.getMaterial({
+        color: this.topTrapezoid.color,
+        flatShading: true,
+        ...materialReflectivity.soft,
+      }));
 
     const cap = new THREE.CylinderBufferGeometry(
       paramAnimate.coneRadius(this.topCap.widthTop),
@@ -160,10 +164,11 @@ class Lantern extends THREE.Group {
       this.topCap.height,
       this.topCap.radialSegments
     );
-    const capMesh = new THREE.Mesh(
-      cap,
-      this.getMaterial({ color: this.topCap.color, flatShading: true })
-    );
+    const capMesh = new THREE.Mesh(cap, this.getMaterial({
+        color: this.topCap.color,
+        flatShading: true,
+        ...materialReflectivity.soft,
+      }));
 
     this.top.add(boxMesh);
     boxMesh.rotation.y = -45 * THREE.Math.DEG2RAD;

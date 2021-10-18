@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js';
 import {awaitLoader} from '../helpers.js';
+import colors from '../../helpers/colors.js';
+import materialReflectivity from '../../helpers/material-reflectivity.js';
 
 const svgLoader = new SVGLoader();
 
@@ -11,7 +13,8 @@ const svgPaths = [
     height: 85,
     depth: 8,
     cap: 2,
-    color: `#fe6183`,
+    color: colors.LightDominantRed,
+    materialReflectivity: materialReflectivity.soft,
   },
   {
     name: `snowflake`,
@@ -19,7 +22,8 @@ const svgPaths = [
     height: 74,
     depth: 8,
     cap: 2,
-    color: `#3b7bf2`,
+    color: colors.Blue,
+    materialReflectivity: materialReflectivity.basic,
   },
   {
     name: `question`,
@@ -27,7 +31,8 @@ const svgPaths = [
     height: 56,
     depth: 8,
     cap: 2,
-    color: `#3b7bf2`,
+    color: colors.Blue,
+    materialReflectivity: materialReflectivity.basic,
   },
   {
     name: `leaf-1`,
@@ -35,7 +40,8 @@ const svgPaths = [
     height: 117,
     depth: 8,
     cap: 2,
-    color: `#34df96`,
+    color: colors.Green,
+    materialReflectivity: materialReflectivity.basic,
   },
   {
     name: `keyhole`,
@@ -43,7 +49,13 @@ const svgPaths = [
     height: 2000,
     depth: 20,
     cap: 2,
-    color: `#a67ee5`,
+    color: colors.DarkPurple,
+    materialReflectivity: materialReflectivity.basic,
+    children: new THREE.Mesh(new THREE.PlaneGeometry(2000, 2000), new THREE.MeshStandardMaterial({
+        color: new THREE.Color(colors.Purple),
+        side: THREE.DoubleSide,
+        ...materialReflectivity.basic,
+      })),
   },
   {
     name: `flower`,
@@ -51,7 +63,8 @@ const svgPaths = [
     height: 413,
     depth: 4,
     cap: 2,
-    color: `#2873f0`,
+    color: colors.Green,
+    materialReflectivity: materialReflectivity.basic,
   },
   {
     name: `leaf-2`,
@@ -59,7 +72,8 @@ const svgPaths = [
     height: 335.108,
     depth: 3,
     cap: 3,
-    color: `#34df96`,
+    color: colors.Green,
+    materialReflectivity: materialReflectivity.basic,
   },
 ];
 
@@ -70,8 +84,10 @@ const createSvgGroup = (data, settings) => {
   for (let i = 0; i < paths.length; i++) {
     const path = paths[i];
 
-    const material = new THREE.MeshBasicMaterial({
+    const material = new THREE.MeshStandardMaterial({
       color: new THREE.Color(settings.color),
+      side: THREE.DoubleSide,
+      ...settings.materialReflectivity,
     });
 
     const shapes = path.toShapes(true);
@@ -89,6 +105,17 @@ const createSvgGroup = (data, settings) => {
       });
       geometry.applyMatrix(new THREE.Matrix4().makeScale(1, -1, 1));
       const mesh = new THREE.Mesh(geometry, material);
+      
+      if (settings.children) {
+        const content = settings.children;
+
+        const size = new THREE.Vector3();
+        new THREE.Box3().setFromObject(content).getSize(size);
+        content.position.set(size.x / 2, -size.y / 2, 1);
+
+        group.add(content);
+      }
+
       group.add(mesh);
     }
   }

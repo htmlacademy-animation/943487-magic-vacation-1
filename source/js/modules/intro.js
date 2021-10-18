@@ -1,5 +1,4 @@
 import AccentTypographyBuild from './typography-build';
-import Intro from './three/intro.js';
 
 const animationTitle = () => {
   const animationIntroTitle = new AccentTypographyBuild(
@@ -59,23 +58,20 @@ const animationDate = () => {
   }, 1200);
 };
 
-const animationCanvas = () => {
-  const scene = new Intro();
-
+const setCanvasAnimation = (scene) => {
   document.body.addEventListener(`screenChanged`, (event) => {
     const { detail } = event;
     const { screenName } = detail;
 
     if (screenName === `top`) {
-      scene.initScene();
-    } else {
-      scene.end();
-    }
+        scene.renderScene(0);
+      }
+
   });
 };
 
-export default () => {
+export default ({scene}) => {
   animationTitle();
   animationDate();
-  animationCanvas();
+  setCanvasAnimation(scene);
 };

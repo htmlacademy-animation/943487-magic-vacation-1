@@ -1,9 +1,7 @@
 import Swiper from "swiper";
-import Story from './three/story-scene.js';
 
-export default () => {
+export default ({scene}) => {
   let storySlider;
-  let storyScene = new Story();
 
   const setSlider = function () {
     if (((window.innerWidth / window.innerHeight) < 1) || window.innerWidth < 769) {
@@ -18,13 +16,13 @@ export default () => {
         on: {
           slideChange: () => {
             if (storySlider.activeIndex === 0 || storySlider.activeIndex === 1) {
-                storyScene.renderScene(0);
+                scene.renderScene(1);
             } else if (storySlider.activeIndex === 2 || storySlider.activeIndex === 3) {
-                storyScene.renderScene(1);
+                scene.renderScene(2);
             } else if (storySlider.activeIndex === 4 || storySlider.activeIndex === 5) {
-                storyScene.renderScene(2);
+                scene.renderScene(3);
             } else if (storySlider.activeIndex === 6 || storySlider.activeIndex === 7) {
-                storyScene.renderScene(3);
+                scene.renderScene(4);
             }
           },
           resize: () => {
@@ -52,13 +50,13 @@ export default () => {
         on: {
           slideChange: () => {
             if (storySlider.activeIndex === 0) {
-                storyScene.renderScene(0);
+                scene.renderScene(1);
             } else if (storySlider.activeIndex === 2) {
-                storyScene.renderScene(1);
+                scene.renderScene(2);
             } else if (storySlider.activeIndex === 4) {
-                storyScene.renderScene(2);
+                scene.renderScene(3);
             } else if (storySlider.activeIndex === 6) {
-                storyScene.renderScene(3);
+                scene.renderScene(4);
             }
           },
           resize: () => {
@@ -75,23 +73,12 @@ export default () => {
     if (storySlider) {
       storySlider.destroy();
     }
-    // storyScene.renderScene(0);
     setSlider();
   });
 
   document.body.addEventListener(`screenChanged`, (e) => {
     if (e.detail.screenName === `story`) {
-        storyScene.initScene();
-
-      if (storySlider.activeIndex === 0 || storySlider.activeIndex === 1) {
-        storyScene.renderScene(0);
-      } else if (storySlider.activeIndex === 2 || storySlider.activeIndex === 3) {
-        storyScene.renderScene(1);
-      } else if (storySlider.activeIndex === 4 || storySlider.activeIndex === 5) {
-        storyScene.renderScene(2);
-      } else if (storySlider.activeIndex === 6 || storySlider.activeIndex === 7) {
-        storyScene.renderScene(3);
-      }
+        scene.renderScene(1);
     }
   });
 
