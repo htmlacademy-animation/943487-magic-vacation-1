@@ -11,9 +11,12 @@ import body from './modules/body.js';
 import FullPageScroll from './modules/full-page-scroll';
 import intro from './modules/intro.js';
 
+const fullPageScroll = new FullPageScroll();
+fullPageScroll.init();
+
 // init modules
 mobileHeight();
-slider();
+slider({scene: fullPageScroll.getScene()});
 menu();
 footer();
 chat();
@@ -21,7 +24,4 @@ result();
 form();
 social();
 body();
-intro();
-
-const fullPageScroll = new FullPageScroll();
-fullPageScroll.init();
+intro({scene: fullPageScroll.getScene()});

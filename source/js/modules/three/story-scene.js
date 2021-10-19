@@ -3,12 +3,17 @@ import customRawShaderMaterial from '../helpers/custom-raw-shader-material.js';
 import paramAnimate from '../helpers/param-animate.js';
 import easing from '../helpers/easings.js';
 
+import IntroRoom from "./intro-scene/intro-room.js";
 import FirstRoomStory from './story-scene/first-room/first-room.js';
 import SecondRoomStory from './story-scene/second-room/second-room.js';
 import ThirdRoomStory from './story-scene/third-room/third-room.js';
-import FourthRoomStory from './story-scene/fourth-room/fourth-room.js';
 
 const easeInOut = easing.bezier(0.4, 0, 1, 1);
+
+const ScreenId = {
+  top: 0,
+  story: 1,
+};
 
 export default class Story {
   constructor() {
@@ -17,6 +22,11 @@ export default class Story {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
     this.arrTextures = [
+      {
+        src: `./img/module-5/scenes-textures/scene-0.png`,
+        options: { hueShift: 0.0 },
+        room: IntroRoom,
+      },
       {
         src: `./img/module-5/scenes-textures/scene-1.png`,
         options: { hue: 0.0 },
@@ -45,7 +55,8 @@ export default class Story {
       {
         src: `./img/module-5/scenes-textures/scene-4.png`,
         options: { hue: 0.0 },
-        room: FourthRoomStory,
+        room: FirstRoomStory,
+        roomOptions: { dark: true },
       },
     ];
     this.textureWidth = 2048;
@@ -297,18 +308,25 @@ export default class Story {
       lightGroup.add(lightUnit);
     });
 
+    const ambientLight = new THREE.AmbientLight(0x404040); // soft white light
+    lightGroup.add(ambientLight);
+
     return lightGroup;
   }
 
-  initScene() {
+  initScene(screenName) {
     if (!this.initialized) {
       this.prepareScene();
       this.initialized = true;
     }
 
-    window.addEventListener(`resize`, this.updateSize);
+    if (!this.animationRequest) {
+      window.addEventListener(`resize`, this.updateSize);
 
-    this.animationRequest = requestAnimationFrame(this.render);
+      this.animationRequest = requestAnimationFrame(this.render);
+    }
+
+    this.renderScene(ScreenId[screenName]);
   }
 
   prepareScene() {
@@ -366,7 +384,7 @@ export default class Story {
         if (texture.room) {
           const Room = texture.room;
 
-          const roomElements = new Room();
+          const roomElements = new Room(loaderTextures.roomOptions);
           roomElements.position.x = this.textureWidth * positionX;
 
           if (texture.roomScale) {

@@ -1,6 +1,7 @@
 import throttle from 'lodash/throttle';
 import Timer from './timer.js';
 import NumbersTimer from './numbersTimer.js';
+import Story from './three/story-scene.js';
 
 const historyPage = 1;
 const prizesPage = 2;
@@ -43,6 +44,8 @@ export default class FullPageScroll {
     this.activeScreen = 0;
     this.onScrollHandler = this.onScroll.bind(this);
     this.onUrlHashChengedHandler = this.onUrlHashChanged.bind(this);
+
+    this.setScene();
   }
 
   init() {
@@ -50,6 +53,7 @@ export default class FullPageScroll {
     window.addEventListener(`popstate`, this.onUrlHashChengedHandler);
 
     this.onUrlHashChanged();
+    this.initScene();
   }
 
   onScroll(evt) {
@@ -159,5 +163,32 @@ export default class FullPageScroll {
     } else {
       this.activeScreen = Math.max(0, --this.activeScreen);
     }
+  }
+  
+  setScene() {
+    this.scene = new Story();
+  }
+
+  initScene() {
+    const initScene = (screenName) => {
+      if (screenName === `top` || screenName === `story`) {
+        this.scene.initScene(screenName);
+      } else {
+        this.scene.end();
+      }
+    };
+
+    initScene(this.screenElements[this.activeScreen].id);
+
+    document.body.addEventListener(`screenChanged`, (event) => {
+      const {detail} = event;
+      const {screenName} = detail;
+
+      initScene(screenName);
+    });
+  }
+
+  getScene() {
+    return this.scene;
   }
 }

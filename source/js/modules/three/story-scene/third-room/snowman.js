@@ -1,35 +1,28 @@
 import * as THREE from 'three';
+import colors from '../../../helpers/colors.js';
+import materialReflectivity from '../../../helpers/material-reflectivity';
 
 class Snowman extends THREE.Group {
   constructor() {
     super();
 
-    this.getMaterial = (options = {}) => {
-      const { color, ...rest } = options;
-
-      return new THREE.MeshStandardMaterial({
-        color: new THREE.Color(color),
-        ...rest,
-      });
-    };
-
     this.sphereBig = {
       radius: 75,
       segments: 20,
-      color: `#B1CFF3`,
+      color: colors.SnowColor,
     };
 
     this.sphereSmall = {
       radius: 44,
       segments: 20,
-      color: `#B1CFF3`,
+      color: colors.SnowColor,
     };
 
     this.cone = {
       radius: 18,
       height: 75,
       radialSegments: 20,
-      color: `#F84201`,
+      color: colors.Orange,
     };
 
     this.addSphereBig = this.addSphereBig.bind(this);
@@ -44,16 +37,25 @@ class Snowman extends THREE.Group {
     this.addSphereSmall();
   }
 
+  getMaterial(options = {}) {
+    const {color, ...rest} = options;
+
+    return new THREE.MeshStandardMaterial({
+      color: new THREE.Color(color),
+      ...rest,
+    });
+  }
+
   addSphereBig() {
     const sphere = new THREE.SphereBufferGeometry(
       this.sphereBig.radius,
       this.sphereBig.segments,
       this.sphereBig.segments
     );
-    const sphereMesh = new THREE.Mesh(
-      sphere,
-      this.getMaterial({ color: this.sphereBig.color })
-    );
+    const sphereMesh = new THREE.Mesh(sphere, this.getMaterial({
+        color: this.sphereBig.color,
+        ...materialReflectivity.strong,
+      }));
 
     this.add(sphereMesh);
   }
@@ -66,20 +68,20 @@ class Snowman extends THREE.Group {
       this.sphereSmall.segments,
       this.sphereSmall.segments
     );
-    const sphereMesh = new THREE.Mesh(
-      sphere,
-      this.getMaterial({ color: this.sphereSmall.color })
-    );
+    const sphereMesh = new THREE.Mesh(sphere, this.getMaterial({
+        color: this.sphereSmall.color,
+        ...materialReflectivity.strong
+      }));
 
     const cone = new THREE.ConeBufferGeometry(
       this.cone.radius,
       this.cone.height,
       this.cone.radialSegments
     );
-    const coneMesh = new THREE.Mesh(
-      cone,
-      this.getMaterial({ color: this.cone.color })
-    );
+    const coneMesh = new THREE.Mesh(cone, this.getMaterial({
+        color: this.cone.color,
+        ...materialReflectivity.soft,
+      }));
 
     this.top.add(sphereMesh);
     this.top.add(coneMesh);
