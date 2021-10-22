@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import customRawShaderMaterial from '../helpers/custom-raw-shader-material.js';
+import customRawShaderMaterial from './materials/custom-raw-shader-material.js';
 import SVGObject from './svg-object/SVGObject.js';
 
 export default class Intro {

@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js';
 import {awaitLoader} from '../helpers.js';
 import colors from '../../helpers/colors.js';
-import materialReflectivity from '../../helpers/material-reflectivity.js';
+import materialReflectivity from '../materials/material-reflectivity.js';
 
 const svgLoader = new SVGLoader();
 

@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import paramAnimate from '../../../helpers/param-animate.js';
 import colors from '../../../helpers/colors.js';
-import materialReflectivity from '../../../helpers/material-reflectivity';
+import materialReflectivity from '../../materials/material-reflectivity.js';
 
 class Lantern extends THREE.Group {
   constructor() {

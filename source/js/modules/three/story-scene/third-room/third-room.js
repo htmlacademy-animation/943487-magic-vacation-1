@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import Snowman from './snowman.js';
-import Road from './road.js';
+import Road from '../objects/road.js';
 
 class ThirdRoomStory extends THREE.Group {
   constructor() {

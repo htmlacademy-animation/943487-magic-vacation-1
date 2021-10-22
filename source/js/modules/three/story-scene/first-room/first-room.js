@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import SVGObject from '../../svg-object/SVGObject.js';
-import Rug from './rug.js';
+import Rug from '../objects/rug.js';
 import Saturn from './saturn.js';
 
 class FirstRoomStory extends THREE.Group {

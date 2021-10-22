@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import colors from '../../../helpers/colors.js';
-import materialReflectivity from '../../../helpers/material-reflectivity';
+import materialReflectivity from '../../materials/material-reflectivity.js';
 
 class Snowman extends THREE.Group {
   constructor() {
