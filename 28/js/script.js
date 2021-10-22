@@ -64402,31 +64402,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./source/js/modules/helpers/custom-raw-shader-material.js":
-/*!*****************************************************************!*\
-  !*** ./source/js/modules/helpers/custom-raw-shader-material.js ***!
-  \*****************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _shader_vert__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./shader.vert */ "./source/js/modules/helpers/shader.vert");
-/* harmony import */ var _shader_vert__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_shader_vert__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _shader_frag__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./shader.frag */ "./source/js/modules/helpers/shader.frag");
-/* harmony import */ var _shader_frag__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_shader_frag__WEBPACK_IMPORTED_MODULE_1__);
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = ((uniforms) => ({
-  uniforms,
-  vertexShader: (_shader_vert__WEBPACK_IMPORTED_MODULE_0___default()),
-  fragmentShader: (_shader_frag__WEBPACK_IMPORTED_MODULE_1___default()),
-}));
-
-
-/***/ }),
-
 /***/ "./source/js/modules/helpers/easings.js":
 /*!**********************************************!*\
   !*** ./source/js/modules/helpers/easings.js ***!
@@ -64627,32 +64602,6 @@ const easing = Object.freeze({
 });
 
 /* harmony default export */ __webpack_exports__["default"] = (easing);
-
-/***/ }),
-
-/***/ "./source/js/modules/helpers/material-reflectivity.js":
-/*!************************************************************!*\
-  !*** ./source/js/modules/helpers/material-reflectivity.js ***!
-  \************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ({
-    soft: {
-      roughness: 0.7,
-      metalness: 0.1,
-    },
-    basic: {
-      roughness: 0.7,
-      metalness: 0.2,
-    },
-    strong: {
-      roughness: 0.7,
-      metalness: 0.4,
-    },
-  });
 
 /***/ }),
 
@@ -64933,28 +64882,6 @@ class Scene2D {
   }
 }
 
-
-/***/ }),
-
-/***/ "./source/js/modules/helpers/shader.frag":
-/*!***********************************************!*\
-  !*** ./source/js/modules/helpers/shader.frag ***!
-  \***********************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "precision mediump float;\nuniform sampler2D targetMap;\nvarying vec2 vUv;\nstruct optionsStruct {\n\tfloat hue;\n\tbool magnify;\n};\nuniform optionsStruct options;\nvec3 hueShift(vec3 color, float hue) {\n\tconst vec3 k = vec3(0.57735, 0.57735, 0.57735);\n\tfloat cosAngle = cos(hue);\n\treturn vec3(((color * cosAngle) + (cross(k, color) * sin(hue))) + ((k * dot(k, color)) * (1.0 - cosAngle)));\n}\nstruct bubbleStruct {\n\tfloat radius;\n\tfloat glareOffset;\n\tfloat glareAngleStart;\n\tfloat glareAngleEnd;\n\tvec2 position;\n};\nstruct magnificationStruct {\n\tbubbleStruct bubbles[3];\n\tvec2 resolution;\n};\nuniform magnificationStruct magnification;\nfloat getOffset(vec2 point, vec2 circle) {\n\treturn sqrt(pow(point.x - circle.x, 2.0) + pow(point.y - circle.y, 2.0));\n}\nbool isBetweenAngles(vec2 point, float glareAngleStart, float glareAngleEnd) {\n\tfloat angle = atan(point.y, point.x);\n\treturn (angle >= glareAngleStart) && (angle <= glareAngleEnd);\n}\nbool isCurrentBubble(vec2 point, vec2 circle, float radius, float outlineThickness) {\n\tfloat offset = getOffset(point, circle);\n\treturn offset < (radius + outlineThickness);\n}\nbool isInsideCircle(vec2 point, vec2 circle, float radius) {\n\tfloat offset = getOffset(point, circle);\n\treturn offset < radius;\n}\nbool isOutlineCircle(vec2 point, vec2 circle, float radius, float outlineThickness) {\n\tfloat offset = getOffset(point, circle);\n\treturn (floor(offset) >= floor(radius)) && (floor(offset) <= floor(radius + outlineThickness));\n}\nbool isGlare(vec2 point, vec2 circle, float radius, float glareThickness, float glareAngleStart, float glareAngleEnd) {\n\tbool isBetweenGlareAngles = isBetweenAngles(point - circle, glareAngleStart, glareAngleEnd);\n\tbool isWithinGlareOutline = isOutlineCircle(point, circle, radius, glareThickness);\n\treturn isBetweenGlareAngles && isWithinGlareOutline;\n}\nvec4 blendOutline(vec4 texture, vec4 outline) {\n\treturn vec4(mix(texture.rgb, outline.rgb, outline.a), texture.a);\n}\nvec4 magnify(sampler2D targetMap, magnificationStruct magnification) {\n\tfloat outlineThickness = 1.5;\n\tvec4 outlineColor = vec4(1, 1, 1, 0.15);\n\tfloat glareThickness = outlineThickness;\n\tvec4 glareColor = outlineColor;\n\tvec2 resolution = magnification.resolution;\n\tbubbleStruct bubble = (magnification.bubbles)[0];\n\tvec2 point = gl_FragCoord.xy;\n\tfor (int index = 0; index < 3; index++) {\n\t\tbubbleStruct currentBubble = (magnification.bubbles)[index];\n\t\tvec2 currentPosition = currentBubble.position;\n\t\tfloat currentRadius = currentBubble.radius;\n\t\tif (isCurrentBubble(point, currentPosition, currentRadius, outlineThickness)) {\n\t\t\tbubble = currentBubble;\n\t\t}\n\t}\n\tvec2 position = bubble.position;\n\tfloat radius = bubble.radius;\n\tfloat glareAngleStart = bubble.glareAngleStart;\n\tfloat glareAngleEnd = bubble.glareAngleEnd;\n\tfloat glareOffset = bubble.glareOffset;\n\tfloat h = bubble.radius / 2.0;\n\tfloat hr = radius * sqrt(1.0 - pow((radius - h) / radius, 2.0));\n\tfloat offset = sqrt(pow(point.x - position.x, 2.0) + pow(point.y - position.y, 2.0));\n\tbool pointIsInside = isInsideCircle(point, position, hr);\n\tbool pointIsOutline = isOutlineCircle(point, position, hr, outlineThickness);\n\tbool pointIsGlare = isGlare(point, position, hr * glareOffset, glareThickness, glareAngleStart, glareAngleEnd);\n\tvec2 newPoint = pointIsInside ? (((point - position) * (radius - h)) / sqrt(pow(radius, 2.0) - pow(offset, 2.0))) + position : point;\n\tvec2 newVUv = newPoint / resolution;\n\tif (pointIsOutline || pointIsGlare) {\n\t\treturn blendOutline(texture2D(targetMap, newVUv), outlineColor);\n\t}\n\treturn texture2D(targetMap, newVUv);\n}\nvoid main() {\n\tvec4 texel = texture2D(targetMap, vUv);\n\tif (options.magnify) {\n\t\ttexel = magnify(targetMap, magnification);\n\t}\n\tif (options.hue != 0.0) {\n\t\tvec3 hueShifted = hueShift(texel.rgb, options.hue);\n\t\tgl_FragColor = vec4(hueShifted.rgb, 1);\n\t}\n\telse {\n\t\tgl_FragColor = texel;\n\t}\n}\n"
-
-/***/ }),
-
-/***/ "./source/js/modules/helpers/shader.vert":
-/*!***********************************************!*\
-  !*** ./source/js/modules/helpers/shader.vert ***!
-  \***********************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "uniform mat4 projectionMatrix;\nuniform mat4 modelMatrix;\nuniform mat4 viewMatrix;\nattribute vec3 position;\nattribute vec3 normal;\nattribute vec2 uv;\nvarying vec2 vUv;\nvoid main() {\n\tvUv = uv;\n\tgl_Position = ((projectionMatrix * viewMatrix) * modelMatrix) * vec4(position, 1.0);\n}\n"
 
 /***/ }),
 
@@ -65483,6 +65410,173 @@ class IntroRoom extends three__WEBPACK_IMPORTED_MODULE_0__["Group"] {
 
 /***/ }),
 
+/***/ "./source/js/modules/three/materials/custom-raw-shader-material.js":
+/*!*************************************************************************!*\
+  !*** ./source/js/modules/three/materials/custom-raw-shader-material.js ***!
+  \*************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _shader_vert__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./shader.vert */ "./source/js/modules/three/materials/shader.vert");
+/* harmony import */ var _shader_vert__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_shader_vert__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _shader_frag__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./shader.frag */ "./source/js/modules/three/materials/shader.frag");
+/* harmony import */ var _shader_frag__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_shader_frag__WEBPACK_IMPORTED_MODULE_1__);
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ((uniforms) => ({
+  uniforms,
+  vertexShader: (_shader_vert__WEBPACK_IMPORTED_MODULE_0___default()),
+  fragmentShader: (_shader_frag__WEBPACK_IMPORTED_MODULE_1___default()),
+}));
+
+
+/***/ }),
+
+/***/ "./source/js/modules/three/materials/material-reflectivity.js":
+/*!********************************************************************!*\
+  !*** ./source/js/modules/three/materials/material-reflectivity.js ***!
+  \********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ({
+    soft: {
+      roughness: 0.7,
+      metalness: 0.1,
+    },
+    basic: {
+      roughness: 0.7,
+      metalness: 0.2,
+    },
+    strong: {
+      roughness: 0.7,
+      metalness: 0.4,
+    },
+  });
+
+/***/ }),
+
+/***/ "./source/js/modules/three/materials/roadShaderMaterial.js":
+/*!*****************************************************************!*\
+  !*** ./source/js/modules/three/materials/roadShaderMaterial.js ***!
+  \*****************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _shader_road_vert__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./shader-road.vert */ "./source/js/modules/three/materials/shader-road.vert");
+/* harmony import */ var _shader_road_vert__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_shader_road_vert__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _shader_road_frag__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./shader-road.frag */ "./source/js/modules/three/materials/shader-road.frag");
+/* harmony import */ var _shader_road_frag__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_shader_road_frag__WEBPACK_IMPORTED_MODULE_1__);
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ((uniforms) => ({
+  uniforms,
+  vertexShader: (_shader_road_vert__WEBPACK_IMPORTED_MODULE_0___default()),
+  fragmentShader: (_shader_road_frag__WEBPACK_IMPORTED_MODULE_1___default()),
+}));
+
+
+/***/ }),
+
+/***/ "./source/js/modules/three/materials/rugShaderMaterial.js":
+/*!****************************************************************!*\
+  !*** ./source/js/modules/three/materials/rugShaderMaterial.js ***!
+  \****************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _shader_rug_vert__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./shader-rug.vert */ "./source/js/modules/three/materials/shader-rug.vert");
+/* harmony import */ var _shader_rug_vert__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_shader_rug_vert__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _shader_rug_frag__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./shader-rug.frag */ "./source/js/modules/three/materials/shader-rug.frag");
+/* harmony import */ var _shader_rug_frag__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_shader_rug_frag__WEBPACK_IMPORTED_MODULE_1__);
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ((uniforms) => ({
+  uniforms,
+  vertexShader: (_shader_rug_vert__WEBPACK_IMPORTED_MODULE_0___default()),
+  fragmentShader: (_shader_rug_frag__WEBPACK_IMPORTED_MODULE_1___default()),
+}));
+
+
+/***/ }),
+
+/***/ "./source/js/modules/three/materials/shader-road.frag":
+/*!************************************************************!*\
+  !*** ./source/js/modules/three/materials/shader-road.frag ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "varying vec2 vUv;\nuniform vec3 mainColor;\nuniform vec3 stripeColor;\nvoid main() {\n\tfloat stripesY = 3.0 * vUv.y;\n\tfloat roundedY = floor(stripesY);\n\tfloat stripesX = 9.0 * vUv.x;\n\tfloat roundedX = floor(stripesX);\n\tif ((((mod(roundedY, 2.0) == 1.0) && (vUv.y < 0.55)) && (vUv.y > 0.40)) && (mod(roundedX, 2.0) == 1.0)) {\n\t\tgl_FragColor = vec4(stripeColor, 1.0);\n\t}\n\telse {\n\t\tgl_FragColor = vec4(mainColor, 1.0);\n\t}\n}\n"
+
+/***/ }),
+
+/***/ "./source/js/modules/three/materials/shader-road.vert":
+/*!************************************************************!*\
+  !*** ./source/js/modules/three/materials/shader-road.vert ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "varying vec2 vUv;\nvoid main() {\n\tvUv = uv;\n\tgl_Position = (projectionMatrix * modelViewMatrix) * vec4(position, 1.0);\n}\n"
+
+/***/ }),
+
+/***/ "./source/js/modules/three/materials/shader-rug.frag":
+/*!***********************************************************!*\
+  !*** ./source/js/modules/three/materials/shader-rug.frag ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "varying vec2 vUv;\nuniform vec3 mainColor;\nuniform vec3 stripeColor;\nvoid main() {\n\tfloat stripes = 7.0 * vUv.x;\n\tfloat rounded = floor(stripes);\n\tif (mod(rounded, 2.0) == 1.0) {\n\t\tgl_FragColor = vec4(stripeColor, 1.0);\n\t}\n\telse {\n\t\tgl_FragColor = vec4(mainColor, 1.0);\n\t}\n}\n"
+
+/***/ }),
+
+/***/ "./source/js/modules/three/materials/shader-rug.vert":
+/*!***********************************************************!*\
+  !*** ./source/js/modules/three/materials/shader-rug.vert ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "varying vec2 vUv;\nvoid main() {\n\tvUv = uv;\n\tgl_Position = (projectionMatrix * modelViewMatrix) * vec4(position, 1.0);\n}\n"
+
+/***/ }),
+
+/***/ "./source/js/modules/three/materials/shader.frag":
+/*!*******************************************************!*\
+  !*** ./source/js/modules/three/materials/shader.frag ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "precision mediump float;\nuniform sampler2D targetMap;\nvarying vec2 vUv;\nstruct optionsStruct {\n\tfloat hue;\n\tbool magnify;\n};\nuniform optionsStruct options;\nvec3 hueShift(vec3 color, float hue) {\n\tconst vec3 k = vec3(0.57735, 0.57735, 0.57735);\n\tfloat cosAngle = cos(hue);\n\treturn vec3(((color * cosAngle) + (cross(k, color) * sin(hue))) + ((k * dot(k, color)) * (1.0 - cosAngle)));\n}\nstruct bubbleStruct {\n\tfloat radius;\n\tfloat glareOffset;\n\tfloat glareAngleStart;\n\tfloat glareAngleEnd;\n\tvec2 position;\n};\nstruct magnificationStruct {\n\tbubbleStruct bubbles[3];\n\tvec2 resolution;\n};\nuniform magnificationStruct magnification;\nfloat getOffset(vec2 point, vec2 circle) {\n\treturn sqrt(pow(point.x - circle.x, 2.0) + pow(point.y - circle.y, 2.0));\n}\nbool isBetweenAngles(vec2 point, float glareAngleStart, float glareAngleEnd) {\n\tfloat angle = atan(point.y, point.x);\n\treturn (angle >= glareAngleStart) && (angle <= glareAngleEnd);\n}\nbool isCurrentBubble(vec2 point, vec2 circle, float radius, float outlineThickness) {\n\tfloat offset = getOffset(point, circle);\n\treturn offset < (radius + outlineThickness);\n}\nbool isInsideCircle(vec2 point, vec2 circle, float radius) {\n\tfloat offset = getOffset(point, circle);\n\treturn offset < radius;\n}\nbool isOutlineCircle(vec2 point, vec2 circle, float radius, float outlineThickness) {\n\tfloat offset = getOffset(point, circle);\n\treturn (floor(offset) >= floor(radius)) && (floor(offset) <= floor(radius + outlineThickness));\n}\nbool isGlare(vec2 point, vec2 circle, float radius, float glareThickness, float glareAngleStart, float glareAngleEnd) {\n\tbool isBetweenGlareAngles = isBetweenAngles(point - circle, glareAngleStart, glareAngleEnd);\n\tbool isWithinGlareOutline = isOutlineCircle(point, circle, radius, glareThickness);\n\treturn isBetweenGlareAngles && isWithinGlareOutline;\n}\nvec4 blendOutline(vec4 texture, vec4 outline) {\n\treturn vec4(mix(texture.rgb, outline.rgb, outline.a), texture.a);\n}\nvec4 magnify(sampler2D targetMap, magnificationStruct magnification) {\n\tfloat outlineThickness = 1.5;\n\tvec4 outlineColor = vec4(1, 1, 1, 0.15);\n\tfloat glareThickness = outlineThickness;\n\tvec4 glareColor = outlineColor;\n\tvec2 resolution = magnification.resolution;\n\tbubbleStruct bubble = (magnification.bubbles)[0];\n\tvec2 point = gl_FragCoord.xy;\n\tfor (int index = 0; index < 3; index++) {\n\t\tbubbleStruct currentBubble = (magnification.bubbles)[index];\n\t\tvec2 currentPosition = currentBubble.position;\n\t\tfloat currentRadius = currentBubble.radius;\n\t\tif (isCurrentBubble(point, currentPosition, currentRadius, outlineThickness)) {\n\t\t\tbubble = currentBubble;\n\t\t}\n\t}\n\tvec2 position = bubble.position;\n\tfloat radius = bubble.radius;\n\tfloat glareAngleStart = bubble.glareAngleStart;\n\tfloat glareAngleEnd = bubble.glareAngleEnd;\n\tfloat glareOffset = bubble.glareOffset;\n\tfloat h = bubble.radius / 2.0;\n\tfloat hr = radius * sqrt(1.0 - pow((radius - h) / radius, 2.0));\n\tfloat offset = sqrt(pow(point.x - position.x, 2.0) + pow(point.y - position.y, 2.0));\n\tbool pointIsInside = isInsideCircle(point, position, hr);\n\tbool pointIsOutline = isOutlineCircle(point, position, hr, outlineThickness);\n\tbool pointIsGlare = isGlare(point, position, hr * glareOffset, glareThickness, glareAngleStart, glareAngleEnd);\n\tvec2 newPoint = pointIsInside ? (((point - position) * (radius - h)) / sqrt(pow(radius, 2.0) - pow(offset, 2.0))) + position : point;\n\tvec2 newVUv = newPoint / resolution;\n\tif (pointIsOutline || pointIsGlare) {\n\t\treturn blendOutline(texture2D(targetMap, newVUv), outlineColor);\n\t}\n\treturn texture2D(targetMap, newVUv);\n}\nvoid main() {\n\tvec4 texel = texture2D(targetMap, vUv);\n\tif (options.magnify) {\n\t\ttexel = magnify(targetMap, magnification);\n\t}\n\tif (options.hue != 0.0) {\n\t\tvec3 hueShifted = hueShift(texel.rgb, options.hue);\n\t\tgl_FragColor = vec4(hueShifted.rgb, 1);\n\t}\n\telse {\n\t\tgl_FragColor = texel;\n\t}\n}\n"
+
+/***/ }),
+
+/***/ "./source/js/modules/three/materials/shader.vert":
+/*!*******************************************************!*\
+  !*** ./source/js/modules/three/materials/shader.vert ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "uniform mat4 projectionMatrix;\nuniform mat4 modelMatrix;\nuniform mat4 viewMatrix;\nattribute vec3 position;\nattribute vec3 normal;\nattribute vec2 uv;\nvarying vec2 vUv;\nvoid main() {\n\tvUv = uv;\n\tgl_Position = ((projectionMatrix * viewMatrix) * modelMatrix) * vec4(position, 1.0);\n}\n"
+
+/***/ }),
+
 /***/ "./source/js/modules/three/story-scene.js":
 /*!************************************************!*\
   !*** ./source/js/modules/three/story-scene.js ***!
@@ -65494,7 +65588,7 @@ class IntroRoom extends three__WEBPACK_IMPORTED_MODULE_0__["Group"] {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Story; });
 /* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
-/* harmony import */ var _helpers_custom_raw_shader_material_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../helpers/custom-raw-shader-material.js */ "./source/js/modules/helpers/custom-raw-shader-material.js");
+/* harmony import */ var _materials_custom_raw_shader_material_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./materials/custom-raw-shader-material.js */ "./source/js/modules/three/materials/custom-raw-shader-material.js");
 /* harmony import */ var _helpers_param_animate_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../helpers/param-animate.js */ "./source/js/modules/helpers/param-animate.js");
 /* harmony import */ var _helpers_easings_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../helpers/easings.js */ "./source/js/modules/helpers/easings.js");
 /* harmony import */ var _intro_scene_intro_room_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./intro-scene/intro-room.js */ "./source/js/modules/three/intro-scene/intro-room.js");
@@ -65866,7 +65960,7 @@ class Story {
       loaderTextures.forEach((texture, positionX) => {
         const geometry = new three__WEBPACK_IMPORTED_MODULE_0__["PlaneGeometry"](1, 1);
         const material = new three__WEBPACK_IMPORTED_MODULE_0__["RawShaderMaterial"](
-          Object(_helpers_custom_raw_shader_material_js__WEBPACK_IMPORTED_MODULE_1__["default"])({
+          Object(_materials_custom_raw_shader_material_js__WEBPACK_IMPORTED_MODULE_1__["default"])({
             targetMap: {
               value: texture.src,
             },
@@ -65887,7 +65981,7 @@ class Story {
         if (texture.room) {
           const Room = texture.room;
 
-          const roomElements = new Room(loaderTextures.roomOptions);
+          const roomElements = new Room(texture.roomOptions);
           roomElements.position.x = this.textureWidth * positionX;
 
           if (texture.roomScale) {
@@ -65973,7 +66067,7 @@ class Story {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
 /* harmony import */ var _svg_object_SVGObject_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../svg-object/SVGObject.js */ "./source/js/modules/three/svg-object/SVGObject.js");
-/* harmony import */ var _rug_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./rug.js */ "./source/js/modules/three/story-scene/first-room/rug.js");
+/* harmony import */ var _objects_rug_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../objects/rug.js */ "./source/js/modules/three/story-scene/objects/rug.js");
 /* harmony import */ var _saturn_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./saturn.js */ "./source/js/modules/three/story-scene/first-room/saturn.js");
 
 
@@ -66004,7 +66098,7 @@ class FirstRoomStory extends three__WEBPACK_IMPORTED_MODULE_0__["Group"] {
   }
 
   addRug() {
-    const rug = new _rug_js__WEBPACK_IMPORTED_MODULE_2__["default"]({dark: this.dark});
+    const rug = new _objects_rug_js__WEBPACK_IMPORTED_MODULE_2__["default"]({dark: this.dark});
     rug.scale.set(0.7, 0.7, 0.7);
     rug.position.set(-20, 0, 40);
     rug.rotation.copy(new three__WEBPACK_IMPORTED_MODULE_0__["Euler"](20 * three__WEBPACK_IMPORTED_MODULE_0__["Math"].DEG2RAD, 45 * three__WEBPACK_IMPORTED_MODULE_0__["Math"].DEG2RAD, 180 * three__WEBPACK_IMPORTED_MODULE_0__["Math"].DEG2RAD), `XYZ`);
@@ -66024,103 +66118,6 @@ class FirstRoomStory extends three__WEBPACK_IMPORTED_MODULE_0__["Group"] {
 
 /***/ }),
 
-/***/ "./source/js/modules/three/story-scene/first-room/rug.js":
-/*!***************************************************************!*\
-  !*** ./source/js/modules/three/story-scene/first-room/rug.js ***!
-  \***************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
-/* harmony import */ var _helpers_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../helpers.js */ "./source/js/modules/three/helpers.js");
-/* harmony import */ var _helpers_colors_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../helpers/colors.js */ "./source/js/modules/helpers/colors.js");
-
-
-
-
-
-class Rug extends three__WEBPACK_IMPORTED_MODULE_0__["Group"] {
-  constructor({dark} = {}) {
-    super();
-
-    this.dark = dark;
-
-    this.rug = {
-      width: 180,
-      depth: 3,
-      radius: 763,
-      degStart: 16,
-      degEnd: 74,
-      mainColor: this.dark ? _helpers_colors_js__WEBPACK_IMPORTED_MODULE_2__["default"].ShadowedLightPurple : _helpers_colors_js__WEBPACK_IMPORTED_MODULE_2__["default"].LightPurple,
-      stripeColor: this.dark ? _helpers_colors_js__WEBPACK_IMPORTED_MODULE_2__["default"].ShadowedAdditionalPurple : _helpers_colors_js__WEBPACK_IMPORTED_MODULE_2__["default"].AdditionalPurple,
-      segments: 200,
-      stripes: 7,
-    };
-
-    this.addRug = this.addRug.bind(this);
-
-    this.addRug();
-  }
-
-  getMaterial() {
-    return new three__WEBPACK_IMPORTED_MODULE_0__["MeshStandardMaterial"]({
-      side: three__WEBPACK_IMPORTED_MODULE_0__["DoubleSide"],
-      flatShading: true,
-      vertexColors: true,
-      color: new three__WEBPACK_IMPORTED_MODULE_0__["Color"](this.rug.mainColor),
-    });
-  }
-
-  getGeometry() {
-    const points = Object(_helpers_js__WEBPACK_IMPORTED_MODULE_1__["getLathePointsForCircle"])(this.rug.width, this.rug.depth, this.rug.radius);
-    const {start, length} = Object(_helpers_js__WEBPACK_IMPORTED_MODULE_1__["getLatheDegrees"])(this.rug.degStart, this.rug.degEnd);
-
-    const rug = new three__WEBPACK_IMPORTED_MODULE_0__["LatheBufferGeometry"](points, this.rug.segments, start, length).toNonIndexed();
-
-    const position = rug.attributes.position;
-    const positionArray = position.array;
-    const positionCount = position.count;
-
-    const stripeDegree = (this.rug.degEnd - this.rug.degStart) / this.rug.stripes;
-
-    const colorsFloor = [];
-    const color = new three__WEBPACK_IMPORTED_MODULE_0__["Color"]();
-
-    const beginning = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](positionArray[0], positionArray[1], positionArray[2]);
-
-    for (let i = 0; i < positionCount; i++) {
-      color.setStyle(this.rug.mainColor);
-
-      const vector = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](positionArray[i * 3], positionArray[i * 3 + 1], positionArray[i * 3 + 2]);
-      const angle = vector.angleTo(beginning) * three__WEBPACK_IMPORTED_MODULE_0__["Math"].RAD2DEG;
-
-      const isStripe = Math.floor(angle / stripeDegree) % 2 === 1;
-
-      if (isStripe) {
-        color.setStyle(this.rug.stripeColor);
-      }
-
-      colorsFloor.push(color.r, color.g, color.b);
-    }
-
-    rug.setAttribute(`color`, new three__WEBPACK_IMPORTED_MODULE_0__["Float32BufferAttribute"](colorsFloor, 3));
-
-    return rug;
-  }
-
-  addRug() {
-    const mesh = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](this.getGeometry(), this.getMaterial());
-
-    this.add(mesh);
-  }
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (Rug);
-
-/***/ }),
-
 /***/ "./source/js/modules/three/story-scene/first-room/saturn.js":
 /*!******************************************************************!*\
   !*** ./source/js/modules/three/story-scene/first-room/saturn.js ***!
@@ -66133,7 +66130,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
 /* harmony import */ var _helpers_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../helpers.js */ "./source/js/modules/three/helpers.js");
 /* harmony import */ var _helpers_colors_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../helpers/colors.js */ "./source/js/modules/helpers/colors.js");
-/* harmony import */ var _helpers_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../helpers/material-reflectivity.js */ "./source/js/modules/helpers/material-reflectivity.js");
+/* harmony import */ var _materials_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../materials/material-reflectivity.js */ "./source/js/modules/three/materials/material-reflectivity.js");
 
 
 
@@ -66198,7 +66195,7 @@ class Saturn extends three__WEBPACK_IMPORTED_MODULE_0__["Group"] {
     const planet = new three__WEBPACK_IMPORTED_MODULE_0__["SphereBufferGeometry"](this.planet.radius, this.planet.segments, this.planet.segments);
     const mesh = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](planet, this.getMaterial({
         color: this.planet.color,
-        ..._helpers_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_3__["default"].soft,
+        ..._materials_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_3__["default"].soft,
       }));
 
     this.add(mesh);
@@ -66212,7 +66209,7 @@ class Saturn extends three__WEBPACK_IMPORTED_MODULE_0__["Group"] {
       color: this.ring.color,
       side: three__WEBPACK_IMPORTED_MODULE_0__["DoubleSide"],
       flatShading: true,
-      ..._helpers_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_3__["default"].soft,
+      ..._materials_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_3__["default"].soft,
     }));
     mesh.rotation.copy(new three__WEBPACK_IMPORTED_MODULE_0__["Euler"](20 * three__WEBPACK_IMPORTED_MODULE_0__["Math"].DEG2RAD, 0, 18 * three__WEBPACK_IMPORTED_MODULE_0__["Math"].DEG2RAD), `XYZ`);
 
@@ -66223,7 +66220,7 @@ class Saturn extends three__WEBPACK_IMPORTED_MODULE_0__["Group"] {
     const sphere = new three__WEBPACK_IMPORTED_MODULE_0__["SphereBufferGeometry"](this.topSphere.radius, this.topSphere.segments, this.topSphere.segments);
     const mesh = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](sphere, this.getMaterial({
         color: this.topSphere.color,
-        ..._helpers_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_3__["default"].soft,
+        ..._materials_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_3__["default"].soft,
       }));
 
     mesh.position.set(0, this.ring.radius + this.topSphere.radius + 30, 0);
@@ -66234,7 +66231,7 @@ class Saturn extends three__WEBPACK_IMPORTED_MODULE_0__["Group"] {
     const line = new three__WEBPACK_IMPORTED_MODULE_0__["CylinderBufferGeometry"](this.line.radius, this.line.radius, this.line.height, this.line.radialSegments);
     const mesh = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](line, this.getMaterial({
         color: this.line.color,
-        ..._helpers_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_3__["default"].soft,
+        ..._materials_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_3__["default"].soft,
       }));
 
     mesh.position.set(0, this.line.height / 2, 0);
@@ -66243,6 +66240,172 @@ class Saturn extends three__WEBPACK_IMPORTED_MODULE_0__["Group"] {
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (Saturn);
+
+/***/ }),
+
+/***/ "./source/js/modules/three/story-scene/objects/road.js":
+/*!*************************************************************!*\
+  !*** ./source/js/modules/three/story-scene/objects/road.js ***!
+  \*************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
+/* harmony import */ var _helpers_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../helpers.js */ "./source/js/modules/three/helpers.js");
+/* harmony import */ var _helpers_colors_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../helpers/colors.js */ "./source/js/modules/helpers/colors.js");
+/* harmony import */ var _materials_roadShaderMaterial_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../materials/roadShaderMaterial.js */ "./source/js/modules/three/materials/roadShaderMaterial.js");
+
+
+
+
+
+
+class Road extends three__WEBPACK_IMPORTED_MODULE_0__["Group"] {
+  constructor() {
+    super();
+
+    this.road = {
+      width: 160,
+      depth: 3,
+      radius: 732,
+      degStart: 0,
+      degEnd: 90,
+      mainColor: _helpers_colors_js__WEBPACK_IMPORTED_MODULE_2__["default"].Grey,
+      segments: 50,
+      stripeColor: _helpers_colors_js__WEBPACK_IMPORTED_MODULE_2__["default"].White,
+    };
+
+    this.addRoad = this.addRoad.bind(this);
+
+    this.addRoad();
+  }
+
+  getMaterial() {
+    return new three__WEBPACK_IMPORTED_MODULE_0__["ShaderMaterial"](
+      Object(_materials_roadShaderMaterial_js__WEBPACK_IMPORTED_MODULE_3__["default"])({
+        mainColor: { value: new three__WEBPACK_IMPORTED_MODULE_0__["Color"](this.road.mainColor) },
+        stripeColor: { value: new three__WEBPACK_IMPORTED_MODULE_0__["Color"](this.road.stripeColor) },
+      })
+    );
+  }
+
+  getGeometry() {
+    const points = Object(_helpers_js__WEBPACK_IMPORTED_MODULE_1__["getLathePointsForCircle"])(
+      this.road.width,
+      this.road.depth,
+      this.road.radius
+    );
+    const { start, length } = Object(_helpers_js__WEBPACK_IMPORTED_MODULE_1__["getLatheDegrees"])(
+      this.road.degStart,
+      this.road.degEnd
+    );
+
+    const road = new three__WEBPACK_IMPORTED_MODULE_0__["LatheBufferGeometry"](
+      points,
+      this.road.segments,
+      start,
+      length
+    ).toNonIndexed();
+
+    return road;
+  }
+
+  addRoad() {
+    const roadMesh = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](this.getGeometry(), this.getMaterial());
+
+    this.add(roadMesh);
+  }
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (Road);
+
+
+/***/ }),
+
+/***/ "./source/js/modules/three/story-scene/objects/rug.js":
+/*!************************************************************!*\
+  !*** ./source/js/modules/three/story-scene/objects/rug.js ***!
+  \************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
+/* harmony import */ var _helpers_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../helpers.js */ "./source/js/modules/three/helpers.js");
+/* harmony import */ var _helpers_colors_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../helpers/colors.js */ "./source/js/modules/helpers/colors.js");
+/* harmony import */ var _materials_rugShaderMaterial_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../materials/rugShaderMaterial.js */ "./source/js/modules/three/materials/rugShaderMaterial.js");
+
+
+
+
+
+
+class Rug extends three__WEBPACK_IMPORTED_MODULE_0__["Group"] {
+  constructor({ dark } = {}) {
+    super();
+
+    this.dark = dark;
+
+    this.rug = {
+      width: 180,
+      depth: 3,
+      radius: 763,
+      degStart: 16,
+      degEnd: 74,
+      mainColor: this.dark ? _helpers_colors_js__WEBPACK_IMPORTED_MODULE_2__["default"].ShadowedLightPurple : _helpers_colors_js__WEBPACK_IMPORTED_MODULE_2__["default"].LightPurple,
+      stripeColor: this.dark
+        ? _helpers_colors_js__WEBPACK_IMPORTED_MODULE_2__["default"].ShadowedAdditionalPurple
+        : _helpers_colors_js__WEBPACK_IMPORTED_MODULE_2__["default"].AdditionalPurple,
+      segments: 50,
+    };
+
+    this.addRug = this.addRug.bind(this);
+
+    this.addRug();
+  }
+
+  getMaterial() {
+    return new three__WEBPACK_IMPORTED_MODULE_0__["ShaderMaterial"](
+      Object(_materials_rugShaderMaterial_js__WEBPACK_IMPORTED_MODULE_3__["default"])({
+        mainColor: { value: new three__WEBPACK_IMPORTED_MODULE_0__["Color"](this.rug.mainColor) },
+        stripeColor: { value: new three__WEBPACK_IMPORTED_MODULE_0__["Color"](this.rug.stripeColor) },
+      })
+    );
+  }
+
+  getGeometry() {
+    const points = Object(_helpers_js__WEBPACK_IMPORTED_MODULE_1__["getLathePointsForCircle"])(
+      this.rug.width,
+      this.rug.depth,
+      this.rug.radius
+    );
+    const { start, length } = Object(_helpers_js__WEBPACK_IMPORTED_MODULE_1__["getLatheDegrees"])(
+      this.rug.degStart,
+      this.rug.degEnd
+    );
+
+    const rug = new three__WEBPACK_IMPORTED_MODULE_0__["LatheBufferGeometry"](
+      points,
+      this.rug.segments,
+      start,
+      length
+    ).toNonIndexed();
+
+    return rug;
+  }
+
+  addRug() {
+    const mesh = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](this.getGeometry(), this.getMaterial());
+
+    this.add(mesh);
+  }
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (Rug);
+
 
 /***/ }),
 
@@ -66258,7 +66421,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
 /* harmony import */ var _helpers_param_animate_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../helpers/param-animate.js */ "./source/js/modules/helpers/param-animate.js");
 /* harmony import */ var _helpers_colors_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../helpers/colors.js */ "./source/js/modules/helpers/colors.js");
-/* harmony import */ var _helpers_material_reflectivity__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../helpers/material-reflectivity */ "./source/js/modules/helpers/material-reflectivity.js");
+/* harmony import */ var _materials_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../materials/material-reflectivity.js */ "./source/js/modules/three/materials/material-reflectivity.js");
 
 
 
@@ -66345,7 +66508,7 @@ class Lantern extends three__WEBPACK_IMPORTED_MODULE_0__["Group"] {
     );
     const cylinderMesh = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](cylinder, this.getMaterial({
         color: this.cylinder.color,
-        ..._helpers_material_reflectivity__WEBPACK_IMPORTED_MODULE_3__["default"].soft,
+        ..._materials_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_3__["default"].soft,
       }));
 
     const halfSphere = new three__WEBPACK_IMPORTED_MODULE_0__["SphereBufferGeometry"](
@@ -66359,7 +66522,7 @@ class Lantern extends three__WEBPACK_IMPORTED_MODULE_0__["Group"] {
     );
     const halfSphereMesh = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](halfSphere, this.getMaterial({
         color: this.sphere.color,
-        ..._helpers_material_reflectivity__WEBPACK_IMPORTED_MODULE_3__["default"].soft,
+        ..._materials_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_3__["default"].soft,
       }));
 
     this.base.add(cylinderMesh);
@@ -66404,7 +66567,7 @@ class Lantern extends three__WEBPACK_IMPORTED_MODULE_0__["Group"] {
     const boxMesh = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](box, this.getMaterial({
         color: this.box.color,
         flatShading: true,
-        ..._helpers_material_reflectivity__WEBPACK_IMPORTED_MODULE_3__["default"].soft,
+        ..._materials_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_3__["default"].soft,
       }));
 
     const trapezoid = new three__WEBPACK_IMPORTED_MODULE_0__["CylinderBufferGeometry"](
@@ -66416,7 +66579,7 @@ class Lantern extends three__WEBPACK_IMPORTED_MODULE_0__["Group"] {
     const trapezoidMesh = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](trapezoid, this.getMaterial({
         color: this.topTrapezoid.color,
         flatShading: true,
-        ..._helpers_material_reflectivity__WEBPACK_IMPORTED_MODULE_3__["default"].soft,
+        ..._materials_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_3__["default"].soft,
       }));
 
     const cap = new three__WEBPACK_IMPORTED_MODULE_0__["CylinderBufferGeometry"](
@@ -66428,7 +66591,7 @@ class Lantern extends three__WEBPACK_IMPORTED_MODULE_0__["Group"] {
     const capMesh = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](cap, this.getMaterial({
         color: this.topCap.color,
         flatShading: true,
-        ..._helpers_material_reflectivity__WEBPACK_IMPORTED_MODULE_3__["default"].soft,
+        ..._materials_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_3__["default"].soft,
       }));
 
     this.top.add(boxMesh);
@@ -66479,7 +66642,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
 /* harmony import */ var _helpers_param_animate_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../helpers/param-animate.js */ "./source/js/modules/helpers/param-animate.js");
 /* harmony import */ var _helpers_colors_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../helpers/colors.js */ "./source/js/modules/helpers/colors.js");
-/* harmony import */ var _helpers_material_reflectivity__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../helpers/material-reflectivity */ "./source/js/modules/helpers/material-reflectivity.js");
+/* harmony import */ var _materials_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../materials/material-reflectivity.js */ "./source/js/modules/three/materials/material-reflectivity.js");
 
 
 
@@ -66519,7 +66682,7 @@ class Pyramid extends three__WEBPACK_IMPORTED_MODULE_0__["Group"] {
     const mesh = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](cone, this.getMaterial({
         color: this.pyramid.color,
         flatShading: true,
-        ..._helpers_material_reflectivity__WEBPACK_IMPORTED_MODULE_3__["default"].soft,
+        ..._materials_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_3__["default"].soft,
       }));
     this.add(mesh);
   }
@@ -66606,110 +66769,6 @@ class SecondRoomStory extends three__WEBPACK_IMPORTED_MODULE_0__["Group"] {
 
 /***/ }),
 
-/***/ "./source/js/modules/three/story-scene/third-room/road.js":
-/*!****************************************************************!*\
-  !*** ./source/js/modules/three/story-scene/third-room/road.js ***!
-  \****************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
-/* harmony import */ var _helpers_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../helpers.js */ "./source/js/modules/three/helpers.js");
-/* harmony import */ var _helpers_colors_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../helpers/colors.js */ "./source/js/modules/helpers/colors.js");
-
-
-
-
-
-class Road extends three__WEBPACK_IMPORTED_MODULE_0__["Group"] {
-  constructor() {
-    super();
-
-    this.road = {
-      width: 160,
-      depth: 3,
-      radius: 732,
-      degStart: 0,
-      degEnd: 90,
-      mainColor: _helpers_colors_js__WEBPACK_IMPORTED_MODULE_2__["default"].Grey,
-      segments: 200,
-      stripes: 12,
-      stripeColor: _helpers_colors_js__WEBPACK_IMPORTED_MODULE_2__["default"].White,
-      stripeWidth: 20,
-    };
-
-    this.addRoad = this.addRoad.bind(this);
-
-    this.addRoad();
-  }
-
-  getMaterial() {
-    return new three__WEBPACK_IMPORTED_MODULE_0__["MeshStandardMaterial"]({
-      side: three__WEBPACK_IMPORTED_MODULE_0__["DoubleSide"],
-      flatShading: true,
-      vertexColors: true,
-      color: new three__WEBPACK_IMPORTED_MODULE_0__["Color"](this.road.mainColor),
-    });
-  }
-
-  getGeometry() {
-    const points = Object(_helpers_js__WEBPACK_IMPORTED_MODULE_1__["getLathePointsForCircle"])(this.road.width, this.road.depth, this.road.radius);
-    const {start, length} = Object(_helpers_js__WEBPACK_IMPORTED_MODULE_1__["getLatheDegrees"])(this.road.degStart, this.road.degEnd);
-
-    const road = new three__WEBPACK_IMPORTED_MODULE_0__["LatheBufferGeometry"](points, this.road.segments, start, length).toNonIndexed();
-
-    const position = road.attributes.position;
-    const positionArray = position.array;
-    const positionCount = position.count;
-
-    const stripeDegree = (this.road.degEnd - this.road.degStart) / this.road.stripes;
-
-    const colorsFloor = [];
-    const color = new three__WEBPACK_IMPORTED_MODULE_0__["Color"]();
-
-    const beginning = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](positionArray[0], positionArray[1], positionArray[2]);
-
-    for (let i = 0; i < positionCount; i++) {
-      color.setStyle(this.road.mainColor);
-
-      const x = positionArray[i * 3];
-      const y = positionArray[i * 3 + 1];
-      const z = positionArray[i * 3 + 2];
-
-      const vector = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](x, y, z);
-      const angle = vector.angleTo(beginning) * three__WEBPACK_IMPORTED_MODULE_0__["Math"].RAD2DEG;
-
-      const inRightDegree = Math.floor(angle / stripeDegree) % 3 === 1;
-      const offset = Math.sqrt(Math.pow(x, 2) + Math.pow(z, 2)) - this.road.radius;
-      const isRightOffset = offset >= this.road.width / 2 - this.road.stripeWidth / 2 && offset <= this.road.width / 2 + this.road.stripeWidth / 2;
-
-      const isStripe = inRightDegree && isRightOffset;
-
-      if (isStripe) {
-        color.setStyle(this.road.stripeColor);
-      }
-
-      colorsFloor.push(color.r, color.g, color.b);
-    }
-
-    road.setAttribute(`color`, new three__WEBPACK_IMPORTED_MODULE_0__["Float32BufferAttribute"](colorsFloor, 3));
-
-    return road;
-  }
-
-  addRoad() {
-    const mesh = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](this.getGeometry(), this.getMaterial());
-
-    this.add(mesh);
-  }
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (Road);
-
-/***/ }),
-
 /***/ "./source/js/modules/three/story-scene/third-room/snowman.js":
 /*!*******************************************************************!*\
   !*** ./source/js/modules/three/story-scene/third-room/snowman.js ***!
@@ -66721,7 +66780,7 @@ class Road extends three__WEBPACK_IMPORTED_MODULE_0__["Group"] {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
 /* harmony import */ var _helpers_colors_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../helpers/colors.js */ "./source/js/modules/helpers/colors.js");
-/* harmony import */ var _helpers_material_reflectivity__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../helpers/material-reflectivity */ "./source/js/modules/helpers/material-reflectivity.js");
+/* harmony import */ var _materials_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../materials/material-reflectivity.js */ "./source/js/modules/three/materials/material-reflectivity.js");
 
 
 
@@ -66778,7 +66837,7 @@ class Snowman extends three__WEBPACK_IMPORTED_MODULE_0__["Group"] {
     );
     const sphereMesh = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](sphere, this.getMaterial({
         color: this.sphereBig.color,
-        ..._helpers_material_reflectivity__WEBPACK_IMPORTED_MODULE_2__["default"].strong,
+        ..._materials_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_2__["default"].strong,
       }));
 
     this.add(sphereMesh);
@@ -66794,7 +66853,7 @@ class Snowman extends three__WEBPACK_IMPORTED_MODULE_0__["Group"] {
     );
     const sphereMesh = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](sphere, this.getMaterial({
         color: this.sphereSmall.color,
-        ..._helpers_material_reflectivity__WEBPACK_IMPORTED_MODULE_2__["default"].strong
+        ..._materials_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_2__["default"].strong
       }));
 
     const cone = new three__WEBPACK_IMPORTED_MODULE_0__["ConeBufferGeometry"](
@@ -66804,7 +66863,7 @@ class Snowman extends three__WEBPACK_IMPORTED_MODULE_0__["Group"] {
     );
     const coneMesh = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](cone, this.getMaterial({
         color: this.cone.color,
-        ..._helpers_material_reflectivity__WEBPACK_IMPORTED_MODULE_2__["default"].soft,
+        ..._materials_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_2__["default"].soft,
       }));
 
     this.top.add(sphereMesh);
@@ -66834,7 +66893,7 @@ class Snowman extends three__WEBPACK_IMPORTED_MODULE_0__["Group"] {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
 /* harmony import */ var _snowman_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./snowman.js */ "./source/js/modules/three/story-scene/third-room/snowman.js");
-/* harmony import */ var _road_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./road.js */ "./source/js/modules/three/story-scene/third-room/road.js");
+/* harmony import */ var _objects_road_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../objects/road.js */ "./source/js/modules/three/story-scene/objects/road.js");
 
 
 
@@ -66874,7 +66933,7 @@ class ThirdRoomStory extends three__WEBPACK_IMPORTED_MODULE_0__["Group"] {
   }
 
   addRoad() {
-    const road = new _road_js__WEBPACK_IMPORTED_MODULE_2__["default"]();
+    const road = new _objects_road_js__WEBPACK_IMPORTED_MODULE_2__["default"]();
     road.scale.set(0.7, 0.7, 0.7);
     road.position.set(-20, 0, 40);
     road.rotation.copy(new three__WEBPACK_IMPORTED_MODULE_0__["Euler"](20 * three__WEBPACK_IMPORTED_MODULE_0__["Math"].DEG2RAD, 45 * three__WEBPACK_IMPORTED_MODULE_0__["Math"].DEG2RAD, 180 * three__WEBPACK_IMPORTED_MODULE_0__["Math"].DEG2RAD), `XYZ`);
@@ -66929,7 +66988,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var three_examples_jsm_loaders_SVGLoader_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! three/examples/jsm/loaders/SVGLoader.js */ "./node_modules/three/examples/jsm/loaders/SVGLoader.js");
 /* harmony import */ var _helpers_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../helpers.js */ "./source/js/modules/three/helpers.js");
 /* harmony import */ var _helpers_colors_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../helpers/colors.js */ "./source/js/modules/helpers/colors.js");
-/* harmony import */ var _helpers_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../helpers/material-reflectivity.js */ "./source/js/modules/helpers/material-reflectivity.js");
+/* harmony import */ var _materials_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../materials/material-reflectivity.js */ "./source/js/modules/three/materials/material-reflectivity.js");
 
 
 
@@ -66946,7 +67005,7 @@ const svgPaths = [
     depth: 8,
     cap: 2,
     color: _helpers_colors_js__WEBPACK_IMPORTED_MODULE_3__["default"].LightDominantRed,
-    materialReflectivity: _helpers_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_4__["default"].soft,
+    materialReflectivity: _materials_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_4__["default"].soft,
   },
   {
     name: `snowflake`,
@@ -66955,7 +67014,7 @@ const svgPaths = [
     depth: 8,
     cap: 2,
     color: _helpers_colors_js__WEBPACK_IMPORTED_MODULE_3__["default"].Blue,
-    materialReflectivity: _helpers_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_4__["default"].basic,
+    materialReflectivity: _materials_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_4__["default"].basic,
   },
   {
     name: `question`,
@@ -66964,7 +67023,7 @@ const svgPaths = [
     depth: 8,
     cap: 2,
     color: _helpers_colors_js__WEBPACK_IMPORTED_MODULE_3__["default"].Blue,
-    materialReflectivity: _helpers_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_4__["default"].basic,
+    materialReflectivity: _materials_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_4__["default"].basic,
   },
   {
     name: `leaf-1`,
@@ -66973,7 +67032,7 @@ const svgPaths = [
     depth: 8,
     cap: 2,
     color: _helpers_colors_js__WEBPACK_IMPORTED_MODULE_3__["default"].Green,
-    materialReflectivity: _helpers_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_4__["default"].basic,
+    materialReflectivity: _materials_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_4__["default"].basic,
   },
   {
     name: `keyhole`,
@@ -66982,11 +67041,11 @@ const svgPaths = [
     depth: 20,
     cap: 2,
     color: _helpers_colors_js__WEBPACK_IMPORTED_MODULE_3__["default"].DarkPurple,
-    materialReflectivity: _helpers_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_4__["default"].basic,
+    materialReflectivity: _materials_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_4__["default"].basic,
     children: new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](new three__WEBPACK_IMPORTED_MODULE_0__["PlaneGeometry"](2000, 2000), new three__WEBPACK_IMPORTED_MODULE_0__["MeshStandardMaterial"]({
         color: new three__WEBPACK_IMPORTED_MODULE_0__["Color"](_helpers_colors_js__WEBPACK_IMPORTED_MODULE_3__["default"].Purple),
         side: three__WEBPACK_IMPORTED_MODULE_0__["DoubleSide"],
-        ..._helpers_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_4__["default"].basic,
+        ..._materials_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_4__["default"].basic,
       })),
   },
   {
@@ -66996,7 +67055,7 @@ const svgPaths = [
     depth: 4,
     cap: 2,
     color: _helpers_colors_js__WEBPACK_IMPORTED_MODULE_3__["default"].Green,
-    materialReflectivity: _helpers_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_4__["default"].basic,
+    materialReflectivity: _materials_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_4__["default"].basic,
   },
   {
     name: `leaf-2`,
@@ -67005,7 +67064,7 @@ const svgPaths = [
     depth: 3,
     cap: 3,
     color: _helpers_colors_js__WEBPACK_IMPORTED_MODULE_3__["default"].Green,
-    materialReflectivity: _helpers_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_4__["default"].basic,
+    materialReflectivity: _materials_material_reflectivity_js__WEBPACK_IMPORTED_MODULE_4__["default"].basic,
   },
 ];
 
