@@ -2,7 +2,7 @@ import * as THREE from 'three';
 
 import {getLathePointsForCircle} from '../../helpers.js';
 import colors from '../../../helpers/colors.js';
-import materialReflectivity from '../../../helpers/material-reflectivity.js';
+import materialReflectivity from '../../materials/material-reflectivity.js';
 
 class Saturn extends THREE.Group {
     constructor({dark} = {}) {

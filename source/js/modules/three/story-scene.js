@@ -1,9 +1,9 @@
 import * as THREE from 'three';
-import customRawShaderMaterial from '../helpers/custom-raw-shader-material.js';
+import customRawShaderMaterial from './materials/custom-raw-shader-material.js';
 import paramAnimate from '../helpers/param-animate.js';
 import easing from '../helpers/easings.js';
 
-import IntroRoom from "./intro-scene/intro-room.js";
+import IntroRoom from './intro-scene/intro-room.js';
 import FirstRoomStory from './story-scene/first-room/first-room.js';
 import SecondRoomStory from './story-scene/second-room/second-room.js';
 import ThirdRoomStory from './story-scene/third-room/third-room.js';
@@ -384,7 +384,7 @@ export default class Story {
         if (texture.room) {
           const Room = texture.room;
 
-          const roomElements = new Room(loaderTextures.roomOptions);
+          const roomElements = new Room(texture.roomOptions);
           roomElements.position.x = this.textureWidth * positionX;
 
           if (texture.roomScale) {
