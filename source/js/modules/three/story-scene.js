@@ -402,15 +402,17 @@ export default class Story {
       });
     };
 
-    // const sphere = this.setSphere();
-    // this.scene.add(sphere);
-
     const light = this.setLights();
     light.position.z = this.camera.position.z;
     this.scene.add(light);
 
     this.renderScene(0);
-    // this.animationRequest = requestAnimationFrame(this.render);
+  }
+
+  end() {
+    window.removeEventListener(`resize`, this.updateSize);
+
+    this.animationRequest = null;
   }
 
   render() {
